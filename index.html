@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>续保费用指引</title>
+    <title>续保费用变化提醒</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -56,19 +56,30 @@
         }
 
         .nav-buttons {
-            display: none;
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .month-group {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .month-title {
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 5px;
+            background: #f5f5f5;
+            border-radius: 4px;
         }
 
         .week-btn {
             padding: 6px 12px;
             margin: 4px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 4px; 
             background: #fff;
             font-size: 14px;
             color: #333;
@@ -194,43 +205,118 @@
             left: 5px;
             color: rgba(255,255,255,0.9);
         }
+
+        .special-notice {
+            background: #fff3e0;
+            border: 1px solid #ffb74d;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #e65100;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .special-notice div {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .special-notice div:before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+        }
+
+        .no-rate {
+            color: #ff4d4f;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>续保费用指引</h1>
+        <h1>续保费用变化提醒</h1>
         <div id="countdown-container"></div>
         <div class="search-container">
             <input type="date" id="dateSearch" onchange="searchDate()">
-            <button class="toggle-weeks" onclick="toggleWeeks()">按周查看</button>
+            <button class="toggle-weeks" onclick="toggleWeeks()">按日期查看</button>
         </div>
-        <div class="show-weeks">
-        </div>
-        <div class="nav-buttons">
-            <button onclick="showWeek(1)" class="week-btn">12月3日 - 12月9日</button>
-            <button onclick="showWeek(2)" class="week-btn">12月10日 - 12月16日</button>
-            <button onclick="showWeek(3)" class="week-btn">12月17日 - 12月23日</button>
-            <button onclick="showWeek(4)" class="week-btn">12月24日 - 12月30日</button>
-            <button onclick="showWeek(5)" class="week-btn">12月31日 - 1月6日</button>
-            <button onclick="showWeek(6)" class="week-btn">1月7日 - 1月13日</button>
-            <button onclick="showWeek(7)" class="week-btn">1月14日 - 1月20日</button>
-            <button onclick="showWeek(8)" class="week-btn">1月21日 - 1月27日</button>
-            <button onclick="showWeek(9)" class="week-btn">1月28日 - 1月31日</button>
+        <div class="nav-buttons" style="display: none;">
+            <div class="month-group">
+                <div class="month-title">2024年12月</div>
+                <button onclick="showDate('2024-12-03')" class="week-btn">12月3日</button>
+                <button onclick="showDate('2024-12-04')" class="week-btn">12月4日</button>
+                <button onclick="showDate('2024-12-05')" class="week-btn">12月5日</button>
+                <button onclick="showDate('2024-12-06')" class="week-btn">12月6日</button>
+                <button onclick="showDate('2024-12-07')" class="week-btn">12月7日</button>
+                <button onclick="showDate('2024-12-08')" class="week-btn">12月8日</button>
+                <button onclick="showDate('2024-12-09')" class="week-btn">12月9日</button>
+                <button onclick="showDate('2024-12-10')" class="week-btn">12月10日</button>
+                <button onclick="showDate('2024-12-11')" class="week-btn">12月11日</button>
+                <button onclick="showDate('2024-12-12')" class="week-btn">12月12日</button>
+                <button onclick="showDate('2024-12-13')" class="week-btn">12月13日</button>
+                <button onclick="showDate('2024-12-14')" class="week-btn">12月14日</button>
+                <button onclick="showDate('2024-12-15')" class="week-btn">12月15日</button>
+                <button onclick="showDate('2024-12-16')" class="week-btn">12月16日</button>
+                <button onclick="showDate('2024-12-17')" class="week-btn">12月17日</button>
+                <button onclick="showDate('2024-12-18')" class="week-btn">12月18日</button>
+                <button onclick="showDate('2024-12-19')" class="week-btn">12月19日</button>
+                <button onclick="showDate('2024-12-20')" class="week-btn">12月20日</button>
+                <button onclick="showDate('2024-12-21')" class="week-btn">12月21日</button>
+                <button onclick="showDate('2024-12-22')" class="week-btn">12月22日</button>
+                <button onclick="showDate('2024-12-23')" class="week-btn">12月23日</button>
+                <button onclick="showDate('2024-12-24')" class="week-btn">12月24日</button>
+                <button onclick="showDate('2024-12-25')" class="week-btn">12月25日</button>
+                <button onclick="showDate('2024-12-26')" class="week-btn">12月26日</button>
+                <button onclick="showDate('2024-12-27')" class="week-btn">12月27日</button>
+                <button onclick="showDate('2024-12-28')" class="week-btn">12月28日</button>
+                <button onclick="showDate('2024-12-29')" class="week-btn">12月29日</button>
+                <button onclick="showDate('2024-12-30')" class="week-btn">12月30日</button>
+                <button onclick="showDate('2024-12-31')" class="week-btn">12月31日</button>
+            </div>
+            <div class="month-group">
+                <div class="month-title">2025年1月</div>
+                <button onclick="showDate('2025-01-01')" class="week-btn">1月1日</button>
+                <button onclick="showDate('2025-01-02')" class="week-btn">1月2日</button>
+                <button onclick="showDate('2025-01-03')" class="week-btn">1月3日</button>
+                <button onclick="showDate('2025-01-04')" class="week-btn">1月4日</button>
+                <button onclick="showDate('2025-01-05')" class="week-btn">1月5日</button>
+                <button onclick="showDate('2025-01-06')" class="week-btn">1月6日</button>
+                <button onclick="showDate('2025-01-07')" class="week-btn">1月7日</button>
+                <button onclick="showDate('2025-01-08')" class="week-btn">1月8日</button>
+                <button onclick="showDate('2025-01-09')" class="week-btn">1月9日</button>
+                <button onclick="showDate('2025-01-10')" class="week-btn">1月10日</button>
+                <button onclick="showDate('2025-01-11')" class="week-btn">1月11日</button>
+                <button onclick="showDate('2025-01-12')" class="week-btn">1月12日</button>
+                <button onclick="showDate('2025-01-13')" class="week-btn">1月13日</button>
+                <button onclick="showDate('2025-01-14')" class="week-btn">1月14日</button>
+                <button onclick="showDate('2025-01-15')" class="week-btn">1月15日</button>
+                <button onclick="showDate('2025-01-16')" class="week-btn">1月16日</button>
+                <button onclick="showDate('2025-01-17')" class="week-btn">1月17日</button>
+                <button onclick="showDate('2025-01-18')" class="week-btn">1月18日</button>
+                <button onclick="showDate('2025-01-19')" class="week-btn">1月19日</button>
+                <button onclick="showDate('2025-01-20')" class="week-btn">1月20日</button>
+                <button onclick="showDate('2025-01-21')" class="week-btn">1月21日</button>
+                <button onclick="showDate('2025-01-22')" class="week-btn">1月22日</button>
+                <button onclick="showDate('2025-01-23')" class="week-btn">1月23日</button>
+                <button onclick="showDate('2025-01-24')" class="week-btn">1月24日</button>
+                <button onclick="showDate('2025-01-25')" class="week-btn">1月25日</button>
+                <button onclick="showDate('2025-01-26')" class="week-btn">1月26日</button>
+                <button onclick="showDate('2025-01-27')" class="week-btn">1月27日</button>
+                <button onclick="showDate('2025-01-28')" class="week-btn">1月28日</button>
+                <button onclick="showDate('2025-01-29')" class="week-btn">1月29日</button>
+                <button onclick="showDate('2025-01-30')" class="week-btn">1月30日</button>
+                <button onclick="showDate('2025-01-31')" class="week-btn">1月31日</button>
+            </div>
         </div>
         <div id="guides-container"></div>
     </div>
 
     <script>
         const weekRanges = {
-            1: { start: '2023-12-03', end: '2023-12-09' },
-            2: { start: '2023-12-10', end: '2023-12-16' },
-            3: { start: '2023-12-17', end: '2023-12-23' },
-            4: { start: '2023-12-24', end: '2023-12-30' },
-            5: { start: '2023-12-31', end: '2024-01-06' },
-            6: { start: '2024-01-07', end: '2024-01-13' },
-            7: { start: '2024-01-14', end: '2024-01-20' },
-            8: { start: '2024-01-21', end: '2024-01-27' },
-            9: { start: '2024-01-28', end: '2024-01-31' }
+            1: { start: '2024-12-26', end: '2024-12-31' },
+            2: { start: '2025-01-01', end: '2025-01-04' }
         };
 
         function getCurrentDate() {
@@ -242,36 +328,53 @@
         }
 
         function generateGuideHTML(date) {
-            const renewalStart = addDays(date, 1);
-            const renewalEnd = addDays(date, 30);
+            const dateObj = new Date(date);
+            const renewalStart = addDays(dateObj, 1);
+            const renewalEnd = addDays(dateObj, 30);
             
             let ratesHTML = '';
-            let noticeHTML = '';
+            const cutoffDate = new Date('2024-12-16');
             
-            if (date >= new Date('2024-12-16')) {
-                const cutoff1 = addDays(date, 20);
-                const cutoff2 = addDays(date, 10);
-                
-                ratesHTML = `
-                    <div class="rate-item">${formatDate(cutoff1)}及之后到期的保单增投 <span class="highlight">+5%</span></div>
-                    <div class="rate-item">${formatDate(cutoff2)}至${formatDate(addDays(cutoff1, -1))}到期的保单增投 <span class="highlight">+3%</span></div>
-                    <div class="rate-item no-rate">${formatDate(addDays(cutoff2, -1))}及之前到期的保单没有增投</div>
-                `;
-            } else {
+            if (dateObj < cutoffDate) {
+                // 12月15日及之前的规则
                 ratesHTML = `
                     <div class="rate-item">2025年起保的保单增投 <span class="highlight">+5%</span></div>
                     <div class="rate-item">2024年起保的保单增投 <span class="highlight">+3%</span></div>
                 `;
+                
+                // 12月15日显示特殊提醒
+                if (date === '2024-12-15') {
+                    ratesHTML += `
+                        <div class="special-notice">
+                            <div>明日起，12月16日至12月25日的保单增投从5%降至3%</div>
+                            <div>明日起，12月25日之前的保单增投将降至0%</div>
+                            <div>请及时处理相关保单，以免错过最佳增投机会</div>
+                        </div>
+                    `;
+                }
+            } else {
+                // 计算三个日期区间
+                const highDate = addDays(renewalStart, 19);  // 20天后及之后
+                const midDateEnd = highDate;
+                const midDateStart = addDays(renewalStart, 9);  // 10-19天
+                const lowDate = midDateStart;  // 9天及之前
+
+                ratesHTML = `
+                    <div class="rate-item">${formatDate(highDate)}及之后到期的保单增投 <span class="highlight">+5%</span></div>
+                    <div class="rate-item">${formatDate(midDateStart)}至${formatDate(midDateEnd)}到期的保单增投 <span class="highlight">+3%</span></div>
+                    <div class="rate-item no-rate">${formatDate(addDays(lowDate, -1))}及之前到期的保单没有增投</div>
+                `;
             }
 
             return `
-                <div class="guide-card" id="${formatDate(date, 'iso')}">
+                <div class="guide-card" id="${date}">
                     <div class="date">
-                        ${formatDate(date)}增投规则
+                        ${formatDate(dateObj)}续保费用变化提醒
                     </div>
                     <div class="renewal-period">
-                        <div>今日可续：${formatDate(renewalStart)}至${formatDate(renewalEnd)}到期的保单</div>
-                        <div class="renewal-types">增投对象：燃油、家自车、商业险、续保</div>
+                        <div>今日可续：${formatDate(renewalStart)}至${formatDate(renewalEnd)}</div>
+                        <div>增投对象：燃油、家自车、商业险、续保</div>
+                        <div class="renewal-types">请优先续保增投比例高的客户</div>
                     </div>
                     <div class="investment-rates">
                         ${ratesHTML}
@@ -282,7 +385,8 @@
 
         function formatDate(date, format = 'chinese') {
             if (format === 'chinese') {
-                return `2024年${date.getMonth() + 1}月${date.getDate()}日`;
+                const year = date.getFullYear();
+                return `${year}年${date.getMonth() + 1}月${date.getDate()}日`;
             }
             return date.toISOString().split('T')[0];
         }
@@ -293,93 +397,78 @@
             return result;
         }
 
-        function generateAllGuides() {
-            const container = document.getElementById('guides-container');
-            container.innerHTML = '';
-            
-            for (const week in weekRanges) {
-                const { start, end } = weekRanges[week];
-                const startDate = new Date(start);
-                const endDate = new Date(end);
-                
-                for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-                    container.innerHTML += generateGuideHTML(date);
-                }
-            }
-        }
-
-        function toggleWeeks() {
-            const navButtons = document.querySelector('.nav-buttons');
-            navButtons.style.display = navButtons.style.display === 'none' || navButtons.style.display === '' ? 'block' : 'none';
-        }
-
-        function searchDate() {
-            const date = document.getElementById('dateSearch').value;
-            if (!date) return;
-
-            // 隐藏所有指南卡片
-            const allGuides = document.querySelectorAll('.guide-card');
-            allGuides.forEach(guide => {
-                guide.style.display = 'none';
-            });
-
-            // 只显示选中日期的卡片
-            const selectedGuide = document.getElementById(date);
-            if (selectedGuide) {
-                selectedGuide.style.display = 'block';
-            }
-
-            // 清除周按钮的激活状态
-            document.querySelectorAll('.week-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // 折叠周选择菜单
-            document.querySelector('.nav-buttons').style.display = 'none';
-        }
-
-        function showWeek(weekNum) {
-            const weekDates = weekRanges[weekNum];
-            const allGuides = document.querySelectorAll('.guide-card');
-            
+        function showDate(date) {
             // 更新按钮状态
             document.querySelectorAll('.week-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`button[onclick="showWeek(${weekNum})"]`).classList.add('active');
-            
-            // 自动折叠周选择
-            document.querySelector('.nav-buttons').style.display = 'none';
+            document.querySelector(`button[onclick="showDate('${date}')"]`).classList.add('active');
             
             // 隐藏所有指南卡片
+            const allGuides = document.querySelectorAll('.guide-card');
             allGuides.forEach(guide => {
                 guide.style.display = 'none';
             });
             
-            // 显示选中周的卡片
-            allGuides.forEach(guide => {
-                const guideDate = guide.id;
-                if (guideDate >= weekDates.start && guideDate <= weekDates.end) {
-                    guide.style.display = 'block';
-                    // 为最后一天添加返回顶部链接
-                    if (guideDate === weekDates.end) {
-                        guide.classList.add('last-day');
-                        if (!guide.querySelector('.return-to-top')) {
-                            const returnLink = document.createElement('a');
-                            returnLink.href = '#top';
-                            returnLink.className = 'return-to-top';
-                            returnLink.textContent = '返回顶部';
-                            guide.appendChild(returnLink);
-                        }
-                    } else {
-                        guide.classList.remove('last-day');
-                    }
-                }
-            });
-
-            // 更新日期选择器为该周的第一天
-            document.getElementById('dateSearch').value = weekDates.start;
+            // 显示选中日期的卡片
+            const guide = document.getElementById(date);
+            if (guide) {
+                guide.style.display = 'block';
+            }
+            
+            // 更新日期选择器
+            document.getElementById('dateSearch').value = date;
         }
+
+        function toggleWeeks() {
+            const navButtons = document.querySelector('.nav-buttons');
+            navButtons.style.display = navButtons.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function searchDate() {
+            const date = document.getElementById('dateSearch').value;
+            showDate(date);
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            const dateSearch = document.getElementById('dateSearch');
+            const currentDate = getCurrentDate();
+            
+            // 设置日期选择器的范围
+            dateSearch.min = '2024-12-03';
+            dateSearch.max = '2025-01-31';
+            
+            // 设置当前日期
+            dateSearch.value = currentDate;
+            
+            // 生成所有指南卡片
+            const startDate = new Date('2024-12-03');
+            const endDate = new Date('2025-01-31');
+            const guidesContainer = document.getElementById('guides-container');
+            
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                const dateStr = formatDate(d, 'iso');
+                const guideHTML = generateGuideHTML(dateStr);
+                guidesContainer.innerHTML += guideHTML;
+            }
+            
+            // 只显示当天的内容
+            const allGuides = document.querySelectorAll('.guide-card');
+            allGuides.forEach(guide => {
+                guide.style.display = 'none';
+            });
+            
+            // 显示当前日期的内容
+            showDate(currentDate);
+
+            // 添加倒计时（如果在有效期内）
+            const countdownContainer = document.getElementById('countdown-container');
+            const countdownElement = updateCountdown();
+            if (countdownElement) {
+                countdownContainer.appendChild(countdownElement);
+            }
+        };
 
         function updateCountdown() {
             const targetDate = new Date('2024-12-16T00:00:00');
@@ -401,7 +490,7 @@
                     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
                     
                     countdownElement.innerHTML = `
-                        <div class="countdown-title">费用调整倒计时</div>
+                        <div class="countdown-title">费用下降倒计时</div>
                         <div class="countdown-display">
                             <div class="countdown-item">
                                 <div class="countdown-number">${formatNumber(days)}</div>
@@ -421,10 +510,13 @@
                             </div>
                         </div>
                         <div class="countdown-details">
-                            <div>• 12月16日起，12月26日至1月4日的保单增投从5%降至3%</div>
-                            <div>• 12月16日起，含12月25日之前的保单增投从3%降至0%</div>
+                            <div>12月16日起，12月16日至12月25日的保单增投从5%降至3%</div>
+                            <div>12月16日起，12月25日之前的保单增投将降至0%</div>
+                            <div>请及时处理相关保单，以免错过最佳增投机会</div>
                         </div>
                     `;
+                } else {
+                    countdownElement.style.display = 'none';
                 }
             }
             
@@ -435,35 +527,6 @@
             
             return countdownElement;
         }
-
-        // 页面加载时初始化
-        window.onload = function() {
-            const dateSearch = document.getElementById('dateSearch');
-            const currentDate = getCurrentDate();
-            
-            // 设置日期选择器的范围
-            dateSearch.min = '2023-12-03';
-            dateSearch.max = '2024-01-31';
-            
-            // 设置当前日期
-            dateSearch.value = currentDate;
-            
-            // 生成所有指南卡片
-            generateAllGuides();
-            
-            // 只显示当天的内容
-            const allGuides = document.querySelectorAll('.guide-card');
-            allGuides.forEach(guide => {
-                guide.style.display = guide.id === currentDate ? 'block' : 'none';
-            });
-
-            // 添加倒计时（如果在有效期内）
-            const countdownContainer = document.getElementById('countdown-container');
-            const countdownElement = updateCountdown();
-            if (countdownElement) {
-                countdownContainer.appendChild(countdownElement);
-            }
-        };
     </script>
 </body>
 </html>
