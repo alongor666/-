@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>续保费用指引</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            flex: 1;
+        }
+
+        .toggle-weeks {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-weeks:hover {
+            background: #f8f9fa;
+        }
+
+        .nav-buttons {
+            display: none;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .week-btn {
+            padding: 6px 12px;
+            margin: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .week-btn.active {
+            background: #f0f0f0;
+            border-color: #ccc;
+        }
+
+        .guide-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 15px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .date {
+            font-size: 22px;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .renewal-period {
+            font-size: 16px;
+            color: #595959;
+            margin-bottom: 20px;
+        }
+
+        .renewal-period div {
+            margin-bottom: 8px;
+        }
+
+        .renewal-types {
+            color: #666;
+            font-size: 15px;
+        }
+
+        .investment-rates {
+            font-size: 16px;
+            color: #262626;
+            line-height: 1.8;
+        }
+
+        .rate-item {
+            margin-bottom: 12px;
+        }
+
+        .highlight {
+            color: #1890ff;
+            font-weight: 500;
+        }
+
+        .countdown {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(33, 150, 243, 0.2);
+        }
+
+        .countdown-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 12px;
+            border-radius: 6px;
+            min-width: 40px;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .countdown-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .countdown-details {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.95);
+            text-align: left;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .countdown-details div {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .countdown-details div:before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: rgba(255,255,255,0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>续保费用指引</h1>
+        <div id="countdown-container"></div>
+        <div class="search-container">
+            <input type="date" id="dateSearch" onchange="searchDate()">
+            <button class="toggle-weeks" onclick="toggleWeeks()">按周查看</button>
+        </div>
+        <div class="show-weeks">
+        </div>
+        <div class="nav-buttons">
+            <button onclick="showWeek(1)" class="week-btn">12月3日 - 12月9日</button>
+            <button onclick="showWeek(2)" class="week-btn">12月10日 - 12月16日</button>
+            <button onclick="showWeek(3)" class="week-btn">12月17日 - 12月23日</button>
+            <button onclick="showWeek(4)" class="week-btn">12月24日 - 12月30日</button>
+            <button onclick="showWeek(5)" class="week-btn">12月31日 - 1月6日</button>
+            <button onclick="showWeek(6)" class="week-btn">1月7日 - 1月13日</button>
+            <button onclick="showWeek(7)" class="week-btn">1月14日 - 1月20日</button>
+            <button onclick="showWeek(8)" class="week-btn">1月21日 - 1月27日</button>
+            <button onclick="showWeek(9)" class="week-btn">1月28日 - 1月31日</button>
+        </div>
+        <div id="guides-container"></div>
+    </div>
+
+    <script>
+        const weekRanges = {
+            1: { start: '2023-12-03', end: '2023-12-09' },
+            2: { start: '2023-12-10', end: '2023-12-16' },
+            3: { start: '2023-12-17', end: '2023-12-23' },
+            4: { start: '2023-12-24', end: '2023-12-30' },
+            5: { start: '2023-12-31', end: '2024-01-06' },
+            6: { start: '2024-01-07', end: '2024-01-13' },
+            7: { start: '2024-01-14', end: '2024-01-20' },
+            8: { start: '2024-01-21', end: '2024-01-27' },
+            9: { start: '2024-01-28', end: '2024-01-31' }
+        };
+
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function generateGuideHTML(date) {
+            const renewalStart = addDays(date, 1);
+            const renewalEnd = addDays(date, 30);
+            
+            let ratesHTML = '';
+            let noticeHTML = '';
+            
+            if (date >= new Date('2024-12-16')) {
+                const cutoff1 = addDays(date, 20);
+                const cutoff2 = addDays(date, 10);
+                
+                ratesHTML = `
+                    <div class="rate-item">${formatDate(cutoff1)}及之后到期的保单增投 <span class="highlight">+5%</span></div>
+                    <div class="rate-item">${formatDate(cutoff2)}至${formatDate(addDays(cutoff1, -1))}到期的保单增投 <span class="highlight">+3%</span></div>
+                    <div class="rate-item no-rate">${formatDate(addDays(cutoff2, -1))}及之前到期的保单没有增投</div>
+                `;
+            } else {
+                ratesHTML = `
+                    <div class="rate-item">2025年起保的保单增投 <span class="highlight">+5%</span></div>
+                    <div class="rate-item">2024年起保的保单增投 <span class="highlight">+3%</span></div>
+                `;
+            }
+
+            return `
+                <div class="guide-card" id="${formatDate(date, 'iso')}">
+                    <div class="date">
+                        ${formatDate(date)}增投规则
+                    </div>
+                    <div class="renewal-period">
+                        <div>今日可续：${formatDate(renewalStart)}至${formatDate(renewalEnd)}到期的保单</div>
+                        <div class="renewal-types">增投对象：燃油、家自车、商业险、续保</div>
+                    </div>
+                    <div class="investment-rates">
+                        ${ratesHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatDate(date, format = 'chinese') {
+            if (format === 'chinese') {
+                return `2024年${date.getMonth() + 1}月${date.getDate()}日`;
+            }
+            return date.toISOString().split('T')[0];
+        }
+
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function generateAllGuides() {
+            const container = document.getElementById('guides-container');
+            container.innerHTML = '';
+            
+            for (const week in weekRanges) {
+                const { start, end } = weekRanges[week];
+                const startDate = new Date(start);
+                const endDate = new Date(end);
+                
+                for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+                    container.innerHTML += generateGuideHTML(date);
+                }
+            }
+        }
+
+        function toggleWeeks() {
+            const navButtons = document.querySelector('.nav-buttons');
+            navButtons.style.display = navButtons.style.display === 'none' || navButtons.style.display === '' ? 'block' : 'none';
+        }
+
+        function searchDate() {
+            const date = document.getElementById('dateSearch').value;
+            if (!date) return;
+
+            // 隐藏所有指南卡片
+            const allGuides = document.querySelectorAll('.guide-card');
+            allGuides.forEach(guide => {
+                guide.style.display = 'none';
+            });
+
+            // 只显示选中日期的卡片
+            const selectedGuide = document.getElementById(date);
+            if (selectedGuide) {
+                selectedGuide.style.display = 'block';
+            }
+
+            // 清除周按钮的激活状态
+            document.querySelectorAll('.week-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 折叠周选择菜单
+            document.querySelector('.nav-buttons').style.display = 'none';
+        }
+
+        function showWeek(weekNum) {
+            const weekDates = weekRanges[weekNum];
+            const allGuides = document.querySelectorAll('.guide-card');
+            
+            // 更新按钮状态
+            document.querySelectorAll('.week-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`button[onclick="showWeek(${weekNum})"]`).classList.add('active');
+            
+            // 自动折叠周选择
+            document.querySelector('.nav-buttons').style.display = 'none';
+            
+            // 隐藏所有指南卡片
+            allGuides.forEach(guide => {
+                guide.style.display = 'none';
+            });
+            
+            // 显示选中周的卡片
+            allGuides.forEach(guide => {
+                const guideDate = guide.id;
+                if (guideDate >= weekDates.start && guideDate <= weekDates.end) {
+                    guide.style.display = 'block';
+                    // 为最后一天添加返回顶部链接
+                    if (guideDate === weekDates.end) {
+                        guide.classList.add('last-day');
+                        if (!guide.querySelector('.return-to-top')) {
+                            const returnLink = document.createElement('a');
+                            returnLink.href = '#top';
+                            returnLink.className = 'return-to-top';
+                            returnLink.textContent = '返回顶部';
+                            guide.appendChild(returnLink);
+                        }
+                    } else {
+                        guide.classList.remove('last-day');
+                    }
+                }
+            });
+
+            // 更新日期选择器为该周的第一天
+            document.getElementById('dateSearch').value = weekDates.start;
+        }
+
+        function updateCountdown() {
+            const targetDate = new Date('2024-12-16T00:00:00');
+            const countdownElement = document.createElement('div');
+            countdownElement.className = 'countdown';
+            
+            function formatNumber(number) {
+                return number < 10 ? '0' + number : number;
+            }
+            
+            function updateTimer() {
+                const now = new Date();
+                const timeDiff = targetDate - now;
+                
+                if (timeDiff > 0) {
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                    
+                    countdownElement.innerHTML = `
+                        <div class="countdown-title">费用调整倒计时</div>
+                        <div class="countdown-display">
+                            <div class="countdown-item">
+                                <div class="countdown-number">${formatNumber(days)}</div>
+                                <div class="countdown-label">天</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">${formatNumber(hours)}</div>
+                                <div class="countdown-label">时</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">${formatNumber(minutes)}</div>
+                                <div class="countdown-label">分</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">${formatNumber(seconds)}</div>
+                                <div class="countdown-label">秒</div>
+                            </div>
+                        </div>
+                        <div class="countdown-details">
+                            <div>• 12月16日起，12月26日至1月4日的保单增投从5%降至3%</div>
+                            <div>• 12月16日起，含12月25日之前的保单增投从3%降至0%</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // 初始更新
+            updateTimer();
+            // 每秒更新一次
+            setInterval(updateTimer, 1000);
+            
+            return countdownElement;
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            const dateSearch = document.getElementById('dateSearch');
+            const currentDate = getCurrentDate();
+            
+            // 设置日期选择器的范围
+            dateSearch.min = '2023-12-03';
+            dateSearch.max = '2024-01-31';
+            
+            // 设置当前日期
+            dateSearch.value = currentDate;
+            
+            // 生成所有指南卡片
+            generateAllGuides();
+            
+            // 只显示当天的内容
+            const allGuides = document.querySelectorAll('.guide-card');
+            allGuides.forEach(guide => {
+                guide.style.display = guide.id === currentDate ? 'block' : 'none';
+            });
+
+            // 添加倒计时（如果在有效期内）
+            const countdownContainer = document.getElementById('countdown-container');
+            const countdownElement = updateCountdown();
+            if (countdownElement) {
+                countdownContainer.appendChild(countdownElement);
+            }
+        };
+    </script>
+</body>
+</html>
