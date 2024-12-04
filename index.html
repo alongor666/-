@@ -321,7 +321,7 @@
         <div class="date-control">
             <div class="date-control-header">
                 <input type="date" id="dateSearch" class="date-search" onchange="generateCalendar()">
-                <span class="date-label">选择签单日期、查看续保增投费用变化</span>
+                <span class="date-label">选签单日期、看费用变化</span>
             </div>
             
             <!-- 图示说明 -->
@@ -329,15 +329,15 @@
                 <div class="legend-items">
                     <div class="legend-item">
                         <div class="legend-color" style="background: #FFE5E5;"></div>
-                        <span>已过期（今日及之前）</span>
+                        <span>已过期</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background: #E8F5E9;"></div>
-                        <span>可续期（次日至第30天）</span>
+                        <span>可续期</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background: #E5E5E5;"></div>
-                        <span>不可续期（第31天及之后）</span>
+                        <span>不可续期</span>
                     </div>
                 </div>
             </div>
@@ -538,7 +538,7 @@
                 
                 countdownHTML = `
                     <div class="countdown">
-                        <div class="countdown-title">费用下降倒计时</div>
+                        <div class="countdown-title">距12月16日降费倒计时</div>
                         <div class="countdown-display">
                             <div class="countdown-item">
                                 <div class="countdown-number">${String(days).padStart(2, '0')}</div>
@@ -574,7 +574,7 @@
                 
                 countdownHTML = `
                     <div class="countdown">
-                        <div class="countdown-title">费用下降倒计时</div>
+                        <div class="countdown-title">距12月16日降费倒计时</div>
                         <div class="countdown-display">
                             <div class="countdown-item">
                                 <div class="countdown-number">${String(days).padStart(2, '0')}</div>
@@ -594,8 +594,7 @@
                             </div>
                         </div>
                         <div class="countdown-details">
-                            <div>12月16日起，12月17日至26日保单增投从3%降至0%</div>
-                            <div>12月16日起，12月26日之后保单增投从5%降至0%</div>
+                            <div>12月17日至26日保单降至0%、12月26日后保单从5%降至3%</div>
                             <div>尽快联系客户续保，避免客户与您的损失</div>
                         </div>
                     </div>
