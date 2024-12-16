@@ -8,620 +8,781 @@
         /* 基础样式 */
         body {
             margin: 0;
-            padding: 10px;
+            padding: 20px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #2c3e50;
             font-size: 16px;
-            background: #f5f5f5;
+            background: #f0f9ff;
             -webkit-text-size-adjust: 100%;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px;
+            padding: 24px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 倒计时样式 */
-        .countdown {
-            background: #1E90FF;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            color: white;
-            text-align: center;
-        }
-
-        .countdown-title {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 16px;
-        }
-
-        .countdown-display {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 16px;
-        }
-
-        .countdown-item {
-            text-align: center;
-            min-width: 50px;
-        }
-
-        .countdown-number {
-            font-size: 24px;
-            font-weight: 500;
-            line-height: 1.2;
-            margin-bottom: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 6px 10px;
-            border-radius: 6px;
-        }
-
-        .countdown-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .countdown-details {
-            text-align: left;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 16px;
-        }
-
-        .countdown-details div {
-            margin-bottom: 6px;
+            border-radius: 24px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
             position: relative;
-            padding-left: 16px;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
         }
 
         /* 日期控制区域 */
         .date-control {
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 12px;
-            margin: 12px 0;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e6f4ff;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .date-control:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
 
         .date-control-header {
             display: flex;
-            flex-direction: row;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .date-search {
-            padding: 6px 8px;
-            font-size: 13px;
-            border: 1px solid #3498db;
-            border-radius: 4px;
-            width: 160px;
+            padding: 10px 16px;
+            font-size: 15px;
+            border: 2px solid #00C9FF;
+            border-radius: 12px;
+            width: 180px;
             transition: all 0.3s ease;
             background: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .date-search:focus {
+            border-color: #92FE9D;
+            box-shadow: 0 0 0 4px rgba(0, 201, 255, 0.1);
         }
 
         .date-label {
-            font-size: 13px;
-            color: #666;
+            font-size: 15px;
+            color: #4a5568;
+            font-weight: 600;
         }
 
-        /* 状态样式 */
-        .expired {
-            background: #FFE5E5;  /* 浅红色背景表示已过期 */
-        }
-
-        .not-renewable {
-            background: #E5E5E5;  /* 灰色背景表示不可续期 */
-        }
-
-        .renewable {
-            background: #E8F5E9;  /* 浅绿色背景表示可续期 */
-        }
-
-        /* 图示说明区域 */
-        .legend-container {
-            border-top: 1px solid #eee;
-            padding-top: 12px;
-        }
-
-        .legend-items {
+        /* 状态标签 */
+        .status-tags {
             display: flex;
+            gap: 12px;
+            margin: 20px 0;
             flex-wrap: wrap;
-            gap: 8px;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            color: #666;
-            flex: 1 1 auto;
+        .status-tag {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            flex-shrink: 0;
+        .status-tag.renewable {
+            background: #e6fff0;
+            color: #0d9f4f;
+            border-color: #92FE9D;
+        }
+
+        .status-tag.expired {
+            background: #fff0f0;
+            color: #e53e3e;
+            border-color: #ff9999;
+        }
+
+        .status-tag.not-renewable {
+            background: #f7fafc;
+            color: #718096;
+            border-color: #cbd5e0;
         }
 
         /* 日历容器样式 */
         .calendar-container {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border: 1px solid #eee;
-            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 24px;
         }
 
-        .calendar-grid {
-            display: grid;
-            gap: 8px;
-            min-width: min-content;
+        .month-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 2px solid #e6f4ff;
+        }
+
+        .month-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
 
         .month-divider {
-            grid-column: 1 / -1;
             text-align: center;
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
-            margin: 8px 0;
-            padding: 6px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            color: #2d3748;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: linear-gradient(90deg, #e6f4ff 0%, #f0f9ff 100%);
+            border-radius: 12px;
         }
 
         .weekday-row {
             display: grid;
-            grid-template-columns: repeat(7, minmax(32px, 1fr));
-            gap: 2px;
-            margin-bottom: 2px;
-            position: sticky;
-            top: 30px;
-            background: white;
-            z-index: 1;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px 0;
         }
 
         .weekday-header {
             text-align: center;
-            font-size: 12px;
-            color: #666;
-            padding: 2px;
+            font-size: 14px;
+            color: #718096;
+            font-weight: 600;
         }
 
         .dates-container {
             display: grid;
-            grid-template-columns: repeat(7, minmax(32px, 1fr));
-            gap: 2px;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
         }
 
         .calendar-date {
-            position: relative;
-            padding: 2px;
-            min-height: 44px;
-            border-radius: 6px;
-            background-color: #E5E5E5;
+            aspect-ratio: 1;
+            padding: 8px;
+            border-radius: 12px;
+            background: #f8fafc;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: none;
-            cursor: default;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
         .calendar-date:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .date-number {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 2px;
-        }
-
-        /* 增投比例样式 */
-        .investment-rule {
             font-size: 14px;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .investment-rate {
+            font-size: 24px;
             font-weight: 700;
-            text-align: center;
-            margin-top: 2px;
-            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .rate-3 {
-            color: #1E90FF; /* 使用蓝色显示3% */
+        /* 增投比例颜色 */
+        .investment-rate[data-rate="5"] {
+            color: #e53e3e;
+            background: rgba(255, 229, 229, 0.95);
         }
 
-        .rate-5 {
-            color: #FF4444; /* 使用红色显示5% */
+        .investment-rate[data-rate="3"] {
+            color: #2b6cb0;
+            background: rgba(235, 245, 255, 0.95);
         }
 
-        .rate-0 {
-            color: #666666; /* 使用灰色显示0% */
+        .investment-rate[data-rate="0"] {
+            color: #718096;
+            background: rgba(247, 250, 252, 0.95);
         }
 
-        @media screen and (max-width: 896px) and (orientation: landscape) {
-            body {
-                padding: 5px;
-            }
-
-            .container {
-                padding: 8px;
-            }
-
-            .calendar-date {
-                min-height: 36px;
-            }
-        }
-
-        /* 修改状态样式，提高优先级 */
-        .calendar-date.expired {
-            background-color: #FFE5E5;
-        }
-
+        /* 状态样式 */
         .calendar-date.renewable {
-            background-color: #E8F5E9;
+            background: #e6fff0;
+            border-color: #48bb78;
+            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.2);
+        }
+
+        .calendar-date.expired {
+            background: #fff0f0;
+            border-color: #f56565;
+            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.2);
         }
 
         .calendar-date.not-renewable {
-            background-color: #E5E5E5;
+            background: #f7fafc;
+            border-color: #e2e8f0;
+            opacity: 0.8;
         }
 
-        .calendar-container .calendar-grid .calendar-date {
-            position: relative;
-            padding: 2px;
-            min-height: 40px;
-            border-radius: 4px;
-            background-color: #E5E5E5;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: none;
+        /* 每日激励话语样式 */
+        .daily-quote {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 260px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.5;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.5s ease;
+            z-index: 10;
         }
 
-        .calendar-container .calendar-grid .calendar-date.expired {
-            background-color: #FFE5E5 !important;
+        .daily-quote::before {
+            content: '"';
+            font-size: 48px;
+            position: absolute;
+            left: 8px;
+            top: -8px;
+            opacity: 0.3;
         }
 
-        .calendar-container .calendar-grid .calendar-date.renewable {
-            background-color: #E8F5E9 !important;
+        .daily-quote::after {
+            content: '"';
+            font-size: 48px;
+            position: absolute;
+            right: 8px;
+            bottom: -24px;
+            opacity: 0.3;
         }
 
-        .calendar-container .calendar-grid .calendar-date.not-renewable {
-            background-color: #E5E5E5 !important;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 响应式布局 */
+        @media screen and (max-width: 1024px) {
+            .calendar-container {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .date-control {
+                padding: 16px;
+            }
+
+            .status-tags {
+                gap: 8px;
+            }
+
+            .status-tag {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .date-control-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .date-search {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="countdown-container"></div>
-        
-        <!-- 日期控制区域 -->
         <div class="date-control">
             <div class="date-control-header">
                 <input type="date" id="dateSearch" class="date-search" onchange="generateCalendar()">
-                <span class="date-label">选签单日期、看费用变化</span>
+                <span class="date-label">选择单日，查看费用变化</span>
             </div>
-            
-            <!-- 图示说明 -->
-            <div class="legend-container">
-                <div class="legend-items">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #FFE5E5;"></div>
-                        <span>已过期</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #E8F5E9;"></div>
-                        <span>可续期</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #E5E5E5;"></div>
-                        <span>不可续期</span>
-                    </div>
-                </div>
+            <div class="status-tags">
+                <div class="status-tag renewable">可续期</div>
+                <div class="status-tag expired">已过期</div>
+                <div class="status-tag not-renewable">不可续期</div>
             </div>
         </div>
-
-        <div class="calendar-container">
-            <div id="calendar-grid" class="calendar-grid"></div>
-        </div>
+        
+        <div id="calendar" class="calendar-container"></div>
+        <div class="daily-quote" id="dailyQuote"></div>
     </div>
 
     <script>
-        function calculateInvestmentRate(baseDate, targetDate) {
-            const cutoffDate = new Date(2024, 11, 15); // 2024年12月15日
-            baseDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
-            targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-            
-            if (baseDate <= cutoffDate) {
-                // 12月15日及之前的规则：基于到期年份
-                if (targetDate.getFullYear() === 2025) {
-                    return '+5%';
-                }
-                return '+3%'; // 2024年或之前的都是+3%
-            } else {
-                // 12月16日及之后的规则：基于到期时间
-                const renewalStartDate = new Date(baseDate);
-                renewalStartDate.setDate(renewalStartDate.getDate() + 1);
-                const daysDiff = Math.floor((targetDate - renewalStartDate) / (1000 * 60 * 60 * 24));
-                
-                if (daysDiff >= 20) {
-                    return '+5%';
-                } else if (daysDiff >= 10) {
-                    return '+3%';
-                } else if (daysDiff >= 0) {
-                    return '+0%';
-                }
-            }
-            return '';
+        // 激励话语数组
+        const motivationalQuotes = [
+            // 服务品质
+            "用心服务，品质如一",
+            "服务至上，品质永恒",
+            "匠心服务，卓越品质",
+            "品质服务，永续经营",
+            "专注服务，追求卓越",
+            "服务如心，品质如金",
+            "品质承诺，服务相随",
+            "服务为本，品质为先",
+            "精益求精，服务如一",
+            "品质如山，服务如水",
+            "服务创新，品质恒心",
+            "品质为魂，服务为根",
+            "服务精进，品质永存",
+            "匠心独运，品质卓越",
+            "服务如春，品质如玉",
+            "品质为基，服务为翼",
+            "服务如歌，品质如诗",
+            "精工细作，品质如一",
+            "服务如风，品质如磐",
+            "品质永恒，服务永续",
+            "服务如光，品质如影",
+            "品质为本，服务为荣",
+            "服务如意，品质如愿",
+            "品质铸就，服务相承",
+            "服务如松，品质如柏",
+            "品质为先，服务为重",
+            "服务如虹，品质如日",
+            "品质永驻，服务恒在",
+            "服务如海，品质如天",
+            "品质为基，服务为径",
+            "服务如星，品质如月",
+            "品质为纲，服务为领",
+            "服务如帆，品质如舵",
+            "品质为源，服务为流",
+            "服务如灯，品质如火",
+            "品质为根，服务为叶",
+            "服务如画，品质如框",
+            "品质为魂，服务为形",
+            "服务如琴，品质如弦",
+            "品质为基，服务为石",
+
+            // 专业价值
+            "专业服务，价值永恒",
+            "专业为本，价值为先",
+            "专业如一，价值共赢",
+            "专业创新，价值共享",
+            "专业引领，价值相随",
+            "专业为基，价值为重",
+            "专业如山，价值如海",
+            "专业为魂，价值为根",
+            "专业精进，价值永存",
+            "专业如虹，价值如日",
+            "专业为先，价值为重",
+            "专业如松，价值如柏",
+            "专业永恒，价值永续",
+            "专业如光，价值如影",
+            "专业为本，价值为荣",
+            "专业如意，价值如愿",
+            "专业铸就，价值相承",
+            "专业为基，价值为径",
+            "专业如星，价值如月",
+            "专业为纲，价值为领",
+            "专业如帆，价值如舵",
+            "专业为源，服务为流",
+            "专业如灯，价值如火",
+            "专业为根，价值为叶",
+            "专业如画，价值如框",
+            "专业为魂，价值为形",
+            "专业如琴，价值如弦",
+            "专业为基，价值为石",
+            "专业如歌，价值如诗",
+            "专业如风，价值如磐",
+            "专业永恒，价值永续",
+            "专业如光，价值如影",
+            "专业为本，价值为荣",
+            "专业如意，价值如愿",
+            "专业铸就，价值相承",
+
+            // 客户关怀
+            "用心关怀，温暖相伴",
+            "关怀备至，温情永驻",
+            "真诚关怀，温暖如春",
+            "关怀如一，温情似水",
+            "用心呵护，关怀永续",
+            "关怀如意，温暖如愿",
+            "真情关怀，温暖相随",
+            "关怀如虹，温情似火",
+            "用心相伴，关怀永恒",
+            "关怀如山，温暖如海",
+            "真挚关怀，温情永驻",
+            "关怀如松，温暖如春",
+            "用心守护，关怀相随",
+            "关怀如光，温情似影",
+            "真心呵护，温暖永恒",
+            "关怀如星，温情似月",
+            "用心相随，关怀永驻",
+            "关怀如帆，温暖如舵",
+            "真情相伴，温情永续",
+            "关怀如灯，温暖如火",
+            "用心呵护，关怀如一",
+            "关怀如画，温情似框",
+            "真诚相随，温暖永恒",
+            "关怀如琴，温情似弦",
+            "用心守护，关怀永续",
+            "关怀如歌，温暖如诗",
+            "真挚相伴，温情如一",
+            "关怀如风，温暖如磐",
+            "用心呵护，关怀永恒",
+            "关怀如意，温情似愿",
+
+            // 信任建立
+            "诚信为本，信任为先",
+            "信任相承，诚信永驻",
+            "诚信如山，信任如海",
+            "信任为基，诚信为重",
+            "诚信永恒，信任相随",
+            "信任如虹，诚信如日",
+            "诚信为先，信任为重",
+            "信任如松，诚信如柏",
+            "诚信永续，信任恒在",
+            "信任如光，诚信如影",
+            "诚信为本，信任为荣",
+            "信任如意，诚信如愿",
+            "诚信铸就，信任相承",
+            "信任如星，诚信如月",
+            "诚信为纲，信任为领",
+            "信任如帆，诚信如舵",
+            "诚信为源，服务为流",
+            "信任如灯，诚信如火",
+            "诚信为根，信任为叶",
+            "信任如画，诚信如框",
+            "诚信为魂，信任为形",
+            "信任如琴，诚信如弦",
+            "诚信为基，信任为石",
+            "信任如歌，诚信如诗",
+            "诚信如风，信任如磐",
+            "信任永恒，诚信永续",
+            "诚信如光，信任如影",
+            "信任为本，诚信为荣",
+            "诚信如意，信任如愿",
+            "信任铸就，诚信相承",
+
+            // 续保服务
+            "续保提醒，贴心服务",
+            "及时续保，安心无忧",
+            "专业续保，优惠多多",
+            "续保省心，服务贴心",
+            "及时提醒，优惠享不停",
+            "专属续保，服务到家",
+            "续保无忧，优惠常在",
+            "及时跟进，服务周到",
+            "专业对接，续保无忧",
+            "续保优惠，诚意十足",
+            "及时服务，实惠相随",
+            "专属顾问，一对一续",
+            "续保便捷，服务优质",
+            "及时联系，优惠不断",
+            "专业咨询，续保无虑",
+            "续保省钱，服务升级",
+            "及时办理，优惠加倍",
+            "专属方案，续保无忧",
+            "续保有礼，服务有情",
+            "及时续保，优惠多多",
+            "专业团队，一键续保",
+            "续保无忧，优惠不停",
+            "及时关怀，服务到位",
+            "专属关爱，续保无忧",
+            "续保优选，服务优享",
+            "及时跟踪，优惠升级",
+            "专业服务，续保无虑",
+            "续保省心，优惠加码",
+            "及时沟通，服务贴心",
+            "专属服务，续保无忧",
+
+            // 产品推广
+            "优质产品，实惠价格",
+            "产品可靠，服务优质",
+            "保障无忧，选择明智",
+            "产品创新，服务升级",
+            "优惠力度，诚意满满",
+            "产品齐全，选择多样",
+            "保费实惠，保障周全",
+            "产品领先，服务贴心",
+            "优质车险，明智之选",
+            "产品专业，服务到位",
+            "保障全面，价格合理",
+            "产品可信，服务可靠",
+            "优惠不断，实惠常在",
+            "产品优选，服务优享",
+            "保障升级，服务加倍",
+            "产品创新，价格实在",
+            "优质服务，实惠相随",
+            "产品齐备，选择无忧",
+            "保障有力，服务给力",
+            "产品领航，服务领先",
+            "优惠多多，实惠多多",
+            "产品可靠，放心托付",
+            "保障周到，服务细致",
+            "产品创优，服务创新",
+            "优质保障，实惠相伴",
+            "产品专属，服务专业",
+            "保障升级，价格优惠",
+            "产品领先，口碑相传",
+            "优惠政策，实惠政策",
+            "产品创新，服务创优",
+
+            // 口碑传播
+            "好评如潮，口碑相传",
+            "服务用心，好评如云",
+            "真诚相待，口碑长存",
+            "服务领先，好评不断",
+            "用心经营，口碑相随",
+            "服务周到，好评连连",
+            "真情实意，口碑相传",
+            "服务贴心，好评满满",
+            "用心服务，口碑长青",
+            "服务专业，好评如潮",
+            "真诚以待，口碑相承",
+            "服务优质，好评不绝",
+            "用心呵护，口碑相随",
+            "服务创新，好评如云",
+            "真情相伴，口碑相传",
+            "服务一流，好评连连",
+            "用心经营，口碑永存",
+            "服务卓越，好评如潮",
+            "真诚服务，口碑相传",
+            "服务领航，好评不断",
+            "用心呵护，口碑相随",
+            "服务专业，好评如云",
+            "真情实意，口碑长存",
+            "服务贴心，好评满满",
+            "用心相伴，口碑相传",
+            "服务创新，好评连连",
+            "真诚以待，口碑永存",
+            "服务优质，好评如潮",
+            "用心经营，口碑相承",
+            "服务一流，好评不绝"
+        ];
+
+        // 随机获取激励话语
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+            return motivationalQuotes[randomIndex];
         }
 
-        function isWithinRenewalPeriod(date, renewalStartDate, renewalEndDate) {
-            date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            return date >= renewalStartDate && date <= renewalEndDate;
+        // 显示每日话语
+        function showDailyQuote() {
+            const quote = getRandomQuote();
+            document.getElementById('dailyQuote').textContent = quote;
+        }
+
+        // 页面加载时显示每日话语
+        window.addEventListener('load', showDailyQuote);
+
+        // 计算从今天到2024年底的工作日数量
+        function getWorkdaysUntilYearEnd(startDate) {
+            const endDate = new Date('2024-12-31');
+            let workdays = 0;
+            let currentDate = new Date(startDate);
+            
+            while (currentDate <= endDate) {
+                // 周末（0是周日，6是周六）
+                if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+                    workdays++;
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return workdays;
+        }
+
+        // 根据日期获取每日话语
+        function getDailyQuote(date) {
+            // 计算从年初到现在的天数
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            // 使用日期作为索引来选择话语
+            const index = dayOfYear % motivationalQuotes.length;
+            return motivationalQuotes[index];
+        }
+
+        function calculateInvestmentRate(date, baseDate) {
+            // 将日期重置到午夜时分
+            date = new Date(date);
+            date.setHours(0, 0, 0, 0);
+            baseDate = new Date(baseDate);
+            baseDate.setHours(0, 0, 0, 0);
+            
+            // 计算与基准日期的天数差
+            const diffTime = date - baseDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // 只有在可续期期间（次日起30天内）才计算增投费用
+            if (diffDays > 0 && diffDays <= 30) {
+                if (diffDays >= 20) {
+                    return 5;
+                } else if (diffDays >= 10) {
+                    return 3;
+                } else {
+                    return 0;
+                }
+            }
+            
+            return null;
+        }
+
+        function isWithinRenewalPeriod(date, baseDate) {
+            // 将日期重置到午夜时分
+            date = new Date(date);
+            date.setHours(0, 0, 0, 0);
+            baseDate = new Date(baseDate);
+            baseDate.setHours(0, 0, 0, 0);
+            
+            // 计算与基准日期的天数差
+            const diffTime = date - baseDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // 判断状态
+            if (diffDays <= 0) {
+                // 基准日期及以前：已过期
+                return 'expired';
+            } else if (diffDays <= 30) {
+                // 次日起30天内：可续期
+                return 'renewable';
+            } else {
+                // 30天后：不可续期
+                return 'not-renewable';
+            }
         }
 
         function generateCalendar() {
-            const calendarGrid = document.getElementById('calendar-grid');
-            calendarGrid.innerHTML = '';
+            const selectedDate = new Date(document.getElementById('dateSearch').value);
+            const currentMonth = selectedDate.getMonth();
+            const currentYear = selectedDate.getFullYear();
             
-            // 获取选择的日期或使用当前日期
-            const selectedDate = document.getElementById('dateSearch').value;
-            const baseDate = selectedDate ? new Date(selectedDate) : new Date();
+            const calendarDiv = document.getElementById('calendar');
+            calendarDiv.innerHTML = '';
             
-            // 计算可续期的开始和结束日期
-            const renewalStartDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + 1);
-            const renewalEndDate = new Date(renewalStartDate);
-            renewalEndDate.setDate(renewalStartDate.getDate() + 29); // 30天包含首尾
-            
-            // 动态计算需要显示的月份
-            const months = [];
-            
-            // 从基准日期所在月份开始
-            let currentMonth = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
-            
-            // 直到覆盖续期结束日期所在的月份
-            while (currentMonth <= renewalEndDate) {
-                months.push({
-                    year: currentMonth.getFullYear(),
-                    month: currentMonth.getMonth()
-                });
-                // 移动到下个月
-                currentMonth.setMonth(currentMonth.getMonth() + 1);
-            }
-            
-            // 如果最后一个月和续期结束日期是同一个月，确保也添加进去
-            const lastMonth = months[months.length - 1];
-            if (lastMonth.year !== renewalEndDate.getFullYear() || 
-                lastMonth.month !== renewalEndDate.getMonth()) {
-                months.push({
-                    year: renewalEndDate.getFullYear(),
-                    month: renewalEndDate.getMonth()
-                });
-            }
-            
-            // 星期几的中文名称（从周一开始）
-            const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
-            
-            months.forEach(({ year, month }) => {
-                // 添加月份分隔符
+            // 生成当前月和下个月的日历
+            for(let monthOffset = 0; monthOffset < 2; monthOffset++) {
+                const targetDate = new Date(currentYear, currentMonth + monthOffset, 1);
+                const monthSection = document.createElement('div');
+                monthSection.className = 'month-section';
+                
+                // 月份标题
                 const monthDivider = document.createElement('div');
                 monthDivider.className = 'month-divider';
-                monthDivider.textContent = `${year}年${month + 1}月`;
-                calendarGrid.appendChild(monthDivider);
+                monthDivider.textContent = `${targetDate.getFullYear()}年${targetDate.getMonth() + 1}月`;
+                monthSection.appendChild(monthDivider);
                 
-                // 添加星期标题行容器
+                // 星期行
                 const weekdayRow = document.createElement('div');
                 weekdayRow.className = 'weekday-row';
-                calendarGrid.appendChild(weekdayRow);
-                
-                // 添加星期标题
-                weekdays.forEach(weekday => {
-                    const weekdayCell = document.createElement('div');
-                    weekdayCell.className = 'weekday-header';
-                    weekdayCell.textContent = `周${weekday}`;
-                    weekdayRow.appendChild(weekdayCell);
+                const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+                weekdays.forEach(day => {
+                    const weekdayHeader = document.createElement('div');
+                    weekdayHeader.className = 'weekday-header';
+                    weekdayHeader.textContent = day;
+                    weekdayRow.appendChild(weekdayHeader);
                 });
+                monthSection.appendChild(weekdayRow);
                 
-                // 创建日期行容器
+                // 日期容器
                 const datesContainer = document.createElement('div');
                 datesContainer.className = 'dates-container';
-                calendarGrid.appendChild(datesContainer);
                 
-                // 获取月份的第一天是星期几（0-6，0是周日）
-                let firstDay = new Date(year, month, 1).getDay();
-                // 转换为以周一为第一天（0-6，0是周一）
-                firstDay = firstDay === 0 ? 6 : firstDay - 1;
+                // 获取当月第一天是星期几（0-6）
+                const firstDay = targetDate.getDay();
                 
-                // 添加空白格子
-                for (let i = 0; i < firstDay; i++) {
-                    const emptyCell = document.createElement('div');
-                    emptyCell.className = 'calendar-date';
-                    emptyCell.style.visibility = 'hidden';
-                    datesContainer.appendChild(emptyCell);
+                // 获取当月天数
+                const lastDay = new Date(targetDate.getFullYear(), targetDate.getMonth() + 1, 0).getDate();
+                
+                // 填充空白日期
+                for(let i = 0; i < firstDay; i++) {
+                    const emptyDate = document.createElement('div');
+                    emptyDate.className = 'calendar-date';
+                    datesContainer.appendChild(emptyDate);
                 }
                 
-                // 获取月份的天数
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                
-                // 添加日期格子
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const date = new Date(year, month, day);
-                    const dateCell = document.createElement('div');
-                    dateCell.className = 'calendar-date';
+                // 填充实际日期
+                for(let day = 1; day <= lastDay; day++) {
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'calendar-date';
                     
-                    // 设置日期文本
+                    const currentDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), day);
                     const dateNumber = document.createElement('div');
                     dateNumber.className = 'date-number';
-                    dateNumber.textContent = `${day}日`;
-                    dateCell.appendChild(dateNumber);
+                    dateNumber.textContent = day;
+                    dateDiv.appendChild(dateNumber);
                     
-                    const isRenewalDate = isWithinRenewalPeriod(date, renewalStartDate, renewalEndDate);
+                    // 设置日期状态样式
+                    const status = isWithinRenewalPeriod(currentDate, selectedDate);
+                    dateDiv.classList.add(status);
                     
-                    // 设置状态样式
-                    if (date < renewalStartDate) {
-                        dateCell.classList.add('expired');
-                    } else if (isRenewalDate) {
-                        dateCell.classList.add('renewable');
-                        
-                        // 为可续期日期添加增投信息（包括次日）
-                        const rateDiv = document.createElement('div');
-                        rateDiv.className = 'investment-rule';
-                        
-                        // 计算增投比例
-                        const rate = calculateInvestmentRate(baseDate, date);
-                        rateDiv.textContent = rate;
-                        
-                        // 根据增投比例添加对应的样式类
-                        if (rate === '+5%') {
-                            rateDiv.classList.add('rate-5');
-                        } else if (rate === '+3%') {
-                            rateDiv.classList.add('rate-3');
-                        } else {
-                            rateDiv.classList.add('rate-0');
+                    // 只在可续期状态下显示增投费用
+                    if (status === 'renewable') {
+                        const investmentRate = calculateInvestmentRate(currentDate, selectedDate);
+                        if (investmentRate !== null) {
+                            const rateDiv = document.createElement('div');
+                            rateDiv.className = 'investment-rate';
+                            rateDiv.textContent = `+${investmentRate}%`;
+                            rateDiv.dataset.rate = investmentRate;  
+                            dateDiv.appendChild(rateDiv);
                         }
-                        
-                        dateCell.appendChild(rateDiv);
-                    } else {
-                        dateCell.classList.add('not-renewable');
                     }
                     
-                    datesContainer.appendChild(dateCell);
+                    datesContainer.appendChild(dateDiv);
                 }
-            });
-        }
-
-        function updateCountdown() {
-            const now = new Date();
-            const ruleChangeDate = new Date('2024-12-16T00:00:00');
-            const finalEndDate = new Date('2025-01-31T23:59:59');
-            
-            let countdownHTML = '';
-            
-            if (now >= finalEndDate) {
-                countdownHTML = `
-                    <div class="countdown">
-                        <div class="countdown-title">费用规则已变更</div>
-                        <div class="countdown-details">
-                            <div>活动已于2025年1月31日结束</div>
-                        </div>
-                    </div>
-                `;
-            } else if (now >= ruleChangeDate) {
-                // 12月16日后，显示距离最终截止日期的倒计时
-                const timeDiff = finalEndDate - now;
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
                 
-                countdownHTML = `
-                    <div class="countdown">
-                        <div class="countdown-title">距12月16日降费倒计时</div>
-                        <div class="countdown-display">
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(days).padStart(2, '0')}</div>
-                                <div class="countdown-label">天</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(hours).padStart(2, '0')}</div>
-                                <div class="countdown-label">时</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(minutes).padStart(2, '0')}</div>
-                                <div class="countdown-label">分</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(seconds).padStart(2, '0')}</div>
-                                <div class="countdown-label">秒</div>
-                            </div>
-                        </div>
-                        <div class="countdown-details">
-                            <div>12月16日起，12月17日至26日保单增投从3%降至0%</div>
-                            <div>12月16日起，12月26日之后保单增投从5%降至0%</div>
-                            <div>尽快联系客户续保，避免损失</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // 12月16日前，显示距离规则变更的倒计时
-                const timeDiff = ruleChangeDate - now;
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-                
-                countdownHTML = `
-                    <div class="countdown">
-                        <div class="countdown-title">距12月16日降费倒计时</div>
-                        <div class="countdown-display">
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(days).padStart(2, '0')}</div>
-                                <div class="countdown-label">天</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(hours).padStart(2, '0')}</div>
-                                <div class="countdown-label">时</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(minutes).padStart(2, '0')}</div>
-                                <div class="countdown-label">分</div>
-                            </div>
-                            <div class="countdown-item">
-                                <div class="countdown-number">${String(seconds).padStart(2, '0')}</div>
-                                <div class="countdown-label">秒</div>
-                            </div>
-                        </div>
-                        <div class="countdown-details">
-                            <div>12月16日起，12月17-26日到期的保单从3%降至0%、1月1-5日到期的保单从5%降至3%</div>
-
-                        </div>
-                    </div>
-                `;
+                monthSection.appendChild(datesContainer);
+                calendarDiv.appendChild(monthSection);
             }
-            
-            const countdownContainer = document.getElementById('countdown-container');
-            countdownContainer.innerHTML = countdownHTML;
         }
 
         // 初始化
         window.onload = function() {
             // 设置日期选择器的默认值为今天
-            const today = new Date();
+            const today = new Date('2024-12-16');
             const dateInput = document.getElementById('dateSearch');
-            dateInput.value = today.toISOString().split('T')[0];
-            
-            // 设置日期选择器的范围
-            dateInput.min = '2024-12-01';
-            dateInput.max = '2025-02-29';
+            dateInput.valueAsDate = today;
             
             // 生成日历
             generateCalendar();
-            
-            // 启动倒���时
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
+
+            // 显示每日话语
+            showDailyQuote();
+
+            // 添加日期选择事件监听
+            dateInput.addEventListener('change', generateCalendar);
         };
     </script>
 </body>
