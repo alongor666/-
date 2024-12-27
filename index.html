@@ -5,607 +5,662 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>续保费用变化提醒</title>
     <style>
-        /* 基础样式 */
+        :root {
+            /* 主题色 - 使用更柔和的色调 */
+            --primary-color: #3b7dd8;
+            --primary-light: #edf2fa;
+            --primary-dark: #2d5ca0;
+            
+            /* 状态色 - 调整对比度和饱和度 */
+            --success-color: #34a853;
+            --success-light: #e8f5e9;
+            --success-border: #4caf50;
+            --warning-color: #fbbc05;
+            --warning-light: #fff3e0;
+            --warning-border: #ff9800;
+            --danger-color: #ea4335;
+            --danger-light: #ffebee;
+            --danger-border: #f44336;
+            --disabled-color: #9aa0a6;
+            --disabled-light: #f1f3f4;
+            --disabled-border: #dadce0;
+            
+            /* 费率色 - 使用更微妙的色阶 */
+            --rate-0-color: #5f6368;
+            --rate-0-light: #f8f9fa;
+            --rate-3-color: #1a73e8;
+            --rate-3-light: #e8f0fe;
+            --rate-5-color: #174ea6;
+            --rate-5-light: #e3f2fd;
+            
+            /* 背景色 */
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --bg-dark: #202124;
+            
+            /* 文字色 */
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --text-light: #ffffff;
+            --text-hint: #80868b;
+            
+            /* 边框和阴影 */
+            --border-color: #dadce0;
+            --shadow-sm: 0 1px 2px rgba(60,64,67,0.1);
+            --shadow-md: 0 2px 4px rgba(60,64,67,0.1);
+            --shadow-lg: 0 4px 8px rgba(60,64,67,0.1);
+            
+            /* 间距 */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            
+            /* 圆角 */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            
+            /* 动画 */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.25s ease;
+            --transition-slow: 0.35s ease;
+        }
+
         body {
-            margin: 0;
-            padding: 20px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #2c3e50;
-            font-size: 16px;
-            background: #f0f9ff;
-            -webkit-text-size-adjust: 100%;
+            margin: 0;
+            padding: var(--spacing-md);
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.5;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xl);
+            background-color: var(--bg-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0 0 var(--spacing-sm);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .date-input-container {
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
             position: relative;
-            overflow: hidden;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+        .date-input-container label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
-        /* 日期控制区域 */
-        .date-control {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 20px;
-            margin: 20px 0;
-            border: 2px solid #e6f4ff;
-            position: relative;
-            transition: all 0.3s ease;
+        #dateSearch {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            min-width: 200px;
         }
 
-        .date-control:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        #dateSearch:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
         }
 
-        .date-control-header {
+        #dateSearch:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            background-color: var(--bg-light);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: var(--spacing-xs);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition-fast);
+            position: relative;
         }
 
-        .date-search {
-            padding: 10px 16px;
-            font-size: 15px;
-            border: 2px solid #00C9FF;
-            border-radius: 12px;
-            width: 180px;
-            transition: all 0.3s ease;
-            background: white;
-            outline: none;
-            cursor: pointer;
+        .legend-item:hover {
+            background-color: var(--bg-white);
         }
 
-        .date-search:focus {
-            border-color: #92FE9D;
-            box-shadow: 0 0 0 4px rgba(0, 201, 255, 0.1);
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
-        .date-label {
-            font-size: 15px;
-            color: #4a5568;
-            font-weight: 600;
+        .legend-renewable { 
+            background-color: var(--success-light);
+            border: 1px solid var(--success-border);
+        }
+        .legend-expired { 
+            background-color: var(--danger-light);
+            border: 1px solid var(--danger-border);
+        }
+        .legend-not-renewable { 
+            background-color: var(--disabled-light);
+            border: 1px solid var(--disabled-border);
+        }
+        .legend-rate-0 { 
+            background-color: var(--rate-0-light);
+            border: 1px solid var(--rate-0-color);
+        }
+        .legend-rate-3 { 
+            background-color: var(--rate-3-light);
+            border: 1px solid var(--rate-3-color);
+        }
+        .legend-rate-5 { 
+            background-color: var(--rate-5-light);
+            border: 1px solid var(--rate-5-color);
         }
 
-        /* 状态标签 */
-        .status-tags {
-            display: flex;
-            gap: 12px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        .legend-item[data-tooltip] {
+            cursor: help;
         }
 
-        .status-tag {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+        .legend-item[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity var(--transition-fast);
+            white-space: nowrap;
+            box-shadow: var(--shadow-md);
+            top: calc(100% + var(--spacing-xs));
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .status-tag.renewable {
-            background: #e6fff0;
-            color: #0d9f4f;
-            border-color: #92FE9D;
-        }
-
-        .status-tag.expired {
-            background: #fff0f0;
-            color: #e53e3e;
-            border-color: #ff9999;
-        }
-
-        .status-tag.not-renewable {
-            background: #f7fafc;
-            color: #718096;
-            border-color: #cbd5e0;
-        }
-
-        /* 日历容器样式 */
-        .calendar-container {
+        #calendar {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-top: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .month-section {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border: 2px solid #e6f4ff;
+            background-color: var(--bg-white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            border: 1px solid var(--border-color);
         }
 
         .month-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
         }
 
         .month-divider {
+            padding: var(--spacing-sm);
             text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 16px;
-            padding: 12px;
-            background: linear-gradient(90deg, #e6f4ff 0%, #f0f9ff 100%);
-            border-radius: 12px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background-color: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .weekday-row {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 8px;
-            padding: 8px 0;
+            background-color: var(--bg-white);
         }
 
         .weekday-header {
+            padding: var(--spacing-xs);
             text-align: center;
-            font-size: 14px;
-            color: #718096;
-            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .dates-container {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
+            gap: 1px;
+            background-color: var(--border-color);
+            padding: 1px;
         }
 
         .calendar-date {
             aspect-ratio: 1;
-            padding: 8px;
-            border-radius: 12px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
+            background-color: var(--bg-white);
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-fast);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
+            padding: var(--spacing-xs);
         }
 
         .calendar-date:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: scale(1.02);
+            z-index: 1;
+            box-shadow: var(--shadow-sm);
         }
 
         .date-number {
-            font-size: 14px;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
             font-weight: 500;
-            color: #2d3748;
-            margin-bottom: 4px;
+            margin-bottom: var(--spacing-xs);
         }
 
         .investment-rate {
-            font-size: 24px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: var(--radius-sm);
+            opacity: 0.9;
+            transition: opacity var(--transition-fast);
         }
 
-        /* 增投比例颜色 */
-        .investment-rate[data-rate="5"] {
-            color: #e53e3e;
-            background: rgba(255, 229, 229, 0.95);
-        }
-
-        .investment-rate[data-rate="3"] {
-            color: #2b6cb0;
-            background: rgba(235, 245, 255, 0.95);
-        }
-
-        .investment-rate[data-rate="0"] {
-            color: #718096;
-            background: rgba(247, 250, 252, 0.95);
+        .calendar-date:hover .investment-rate {
+            opacity: 1;
         }
 
         /* 状态样式 */
         .calendar-date.renewable {
-            background: #e6fff0;
-            border-color: #48bb78;
-            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.2);
+            background-color: var(--success-light);
+            border: 1px solid var(--success-border);
         }
 
         .calendar-date.expired {
-            background: #fff0f0;
-            border-color: #f56565;
-            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.2);
+            background-color: var(--danger-light);
+            border: 1px solid var(--danger-border);
+            cursor: not-allowed;
+        }
+
+        .calendar-date.expired::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 45%, var(--danger-border) 45%, var(--danger-border) 55%, transparent 55%);
+            opacity: 0.2;
         }
 
         .calendar-date.not-renewable {
-            background: #f7fafc;
-            border-color: #e2e8f0;
-            opacity: 0.8;
+            background-color: var(--disabled-light);
+            border: 1px solid var(--disabled-border);
+            cursor: not-allowed;
         }
 
-        /* 每日激励话语样式 */
-        .daily-quote {
+        .calendar-date.not-renewable::before {
+            content: '🔒';
             position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 260px;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
-            border-radius: 12px;
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 1.5;
+            top: 2px;
+            right: 2px;
+            font-size: 0.75rem;
+            opacity: 0.5;
+        }
+
+        /* 费率样式 */
+        .investment-rate[data-rate="0"] {
+            color: var(--rate-0-color);
+            background-color: var(--rate-0-light);
+        }
+
+        .investment-rate[data-rate="3"] {
+            color: var(--rate-3-color);
+            background-color: var(--rate-3-light);
+        }
+
+        .investment-rate[data-rate="5"] {
+            color: var(--rate-5-color);
+            background-color: var(--rate-5-light);
+        }
+
+        /* 日期选中状态 */
+        .calendar-date.selected {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+            z-index: 2;
+            border: 2px solid var(--primary-color);
+        }
+
+        /* 每日激励语 */
+        .daily-quote-container {
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            animation: fadeIn 0.5s ease;
-            z-index: 10;
+            margin: var(--spacing-xl) 0 0;
+            padding: var(--spacing-lg);
+            background-color: var(--primary-light);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-dark);
         }
 
-        .daily-quote::before {
-            content: '"';
-            font-size: 48px;
-            position: absolute;
-            left: 8px;
-            top: -8px;
-            opacity: 0.3;
+        #dailyQuote {
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            line-height: 1.6;
         }
 
-        .daily-quote::after {
-            content: '"';
-            font-size: 48px;
-            position: absolute;
-            right: 8px;
-            bottom: -24px;
-            opacity: 0.3;
+        /* 工具提示 */
+        .tooltip {
+            position: fixed;
+            z-index: 1000;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            line-height: 1.4;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            white-space: pre-line;
+            box-shadow: var(--shadow-md);
+            max-width: 280px;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tooltip.visible {
+            opacity: 1;
         }
 
-        /* 响应式布局 */
-        @media screen and (max-width: 1024px) {
-            .calendar-container {
-                grid-template-columns: 1fr;
+        /* 选中状态样式 */
+        .calendar-date.selected {
+            outline: 2px solid var(--primary-color);
+            outline-offset: -2px;
+            box-shadow: var(--shadow-md);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .calendar-date.selected .date-number {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* 副标题样式 */
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-top: var(--spacing-xs);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* 标题容器样式 */
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-xs);
             }
 
             .container {
-                padding: 16px;
+                padding: var(--spacing-md);
             }
 
-            .date-control {
-                padding: 16px;
+            h1 {
+                font-size: 1.5rem;
             }
 
-            .status-tags {
-                gap: 8px;
+            .subtitle {
+                font-size: 0.875rem;
+                padding: 0 var(--spacing-md);
             }
 
-            .status-tag {
-                padding: 6px 12px;
-                font-size: 13px;
+            #calendar {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .calendar-legend {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: var(--spacing-sm);
+                margin: 0 var(--spacing-sm) var(--spacing-md);
+            }
+
+            .legend-item {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .daily-quote-container {
+                margin: var(--spacing-md) 0 0;
+                padding: var(--spacing-md);
+            }
+
+            #dailyQuote {
+                font-size: 0.875rem;
+            }
+
+            .calendar-date {
+                padding: var(--spacing-xs);
+            }
+
+            .date-number {
+                font-size: 0.875rem;
+            }
+
+            .investment-rate {
+                font-size: 0.6875rem;
             }
         }
 
-        @media screen and (max-width: 480px) {
-            body {
-                padding: 10px;
+        /* 深色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-light: #202124;
+                --bg-white: #2d2e31;
+                --text-primary: #e8eaed;
+                --text-secondary: #9aa0a6;
+                --border-color: #3c4043;
+                
+                --primary-light: rgba(59,125,216,0.1);
+                --success-light: rgba(52,168,83,0.1);
+                --warning-light: rgba(251,188,5,0.1);
+                --danger-light: rgba(234,67,53,0.1);
+                --disabled-light: rgba(154,160,166,0.1);
+                
+                --rate-0-light: rgba(95,99,104,0.1);
+                --rate-3-light: rgba(26,115,232,0.1);
+                --rate-5-light: rgba(23,78,166,0.1);
             }
 
-            .date-control-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
+            .calendar-date.expired::after {
+                opacity: 0.1;
             }
 
-            .date-search {
-                width: 100%;
+            .legend-color {
+                border-color: rgba(255,255,255,0.1);
+            }
+        }
+
+        /* 动画关键帧 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* 无障碍支持 */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="date-control">
-            <div class="date-control-header">
-                <input type="date" id="dateSearch" class="date-search" onchange="generateCalendar()">
-                <span class="date-label">选择日期，查看费用变化</span>
-            </div>
-            <div class="status-tags">
-                <div class="status-tag renewable">可续期</div>
-                <div class="status-tag expired">已过期</div>
-                <div class="status-tag not-renewable">不可续期</div>
-            </div>
+        <div class="header">
+            <h1>续保费用变化提醒</h1>
+            <p class="subtitle">轻松查看和管理您的保险续保费用变化</p>
         </div>
         
-        <div id="calendar" class="calendar-container"></div>
-        <div class="daily-quote" id="dailyQuote"></div>
+        <div class="date-input-container">
+            <label for="dateSearch">选择签单日期，查看费用变化</label>
+            <input type="date" id="dateSearch" onchange="generateCalendar()">
+        </div>
+
+        <div class="calendar-legend">
+            <div class="legend-item" data-tooltip="可以办理续保的日期">
+                <div class="legend-color legend-renewable"></div>
+                <span>可续期</span>
+            </div>
+            <div class="legend-item" data-tooltip="已过期，无法办理续保">
+                <div class="legend-color legend-expired"></div>
+                <span>已过期</span>
+            </div>
+            <div class="legend-item" data-tooltip="超出可续期时间范围">
+                <div class="legend-color legend-not-renewable"></div>
+                <span>不可续期</span>
+            </div>
+            <div class="legend-item" data-tooltip="标准费率，无额外费用">
+                <div class="legend-color legend-rate-0"></div>
+                <span>基础费率</span>
+            </div>
+            <div class="legend-item" data-tooltip="在基础费率上增加 3%">
+                <div class="legend-color legend-rate-3"></div>
+                <span>+3% 费率</span>
+            </div>
+            <div class="legend-item" data-tooltip="在基础费率上增加 5%">
+                <div class="legend-color legend-rate-5"></div>
+                <span>+5% 费率</span>
+            </div>
+        </div>
+
+        <div id="calendar"></div>
+
+        <div class="daily-quote-container">
+            <div id="dailyQuote"></div>
+        </div>
     </div>
 
+    <div id="tooltip" class="tooltip"></div>
+
     <script>
-        // 激励话语数组
-        const motivationalQuotes = [
-            // 服务品质
-            "用心服务，品质如一",
-            "服务至上，品质永恒",
-            "匠心服务，卓越品质",
-            "品质服务，永续经营",
-            "专注服务，追求卓越",
-            "服务如心，品质如金",
-            "品质承诺，服务相随",
-            "服务为本，品质为先",
-            "精益求精，服务如一",
-            "品质如山，服务如水",
-            "服务创新，品质恒心",
-            "品质为魂，服务为根",
-            "服务精进，品质永存",
-            "匠心独运，品质卓越",
-            "服务如春，品质如玉",
-            "品质为基，服务为翼",
-            "服务如歌，品质如诗",
-            "精工细作，品质如一",
-            "服务如风，品质如磐",
-            "品质永恒，服务永续",
-            "服务如光，品质如影",
-            "品质为本，服务为荣",
-            "服务如意，品质如愿",
-            "品质铸就，服务相承",
-            "服务如松，品质如柏",
-            "品质为先，服务为重",
-            "服务如虹，品质如日",
-            "品质永驻，服务恒在",
-            "服务如海，品质如天",
-            "品质为基，服务为径",
-            "服务如星，品质如月",
-            "品质为纲，服务为领",
-            "服务如帆，品质如舵",
-            "品质为源，服务为流",
-            "服务如灯，品质如火",
-            "品质为根，服务为叶",
-            "服务如画，品质如框",
-            "品质为魂，服务为形",
-            "服务如琴，品质如弦",
-            "品质为基，服务为石",
+        // 工具提示管理
+        const tooltip = document.getElementById('tooltip');
+        let currentTooltipTarget = null;
 
-            // 专业价值
-            "专业服务，价值永恒",
-            "专业为本，价值为先",
-            "专业如一，价值共赢",
-            "专业创新，价值共享",
-            "专业引领，价值相随",
-            "专业为基，价值为重",
-            "专业如山，价值如海",
-            "专业为魂，价值为根",
-            "专业精进，价值永存",
-            "专业如虹，价值如日",
-            "专业为先，价值为重",
-            "专业如松，价值如柏",
-            "专业永恒，价值永续",
-            "专业如光，价值如影",
-            "专业为本，价值为荣",
-            "专业如意，价值如愿",
-            "专业铸就，价值相承",
-            "专业为基，价值为径",
-            "专业如星，价值如月",
-            "专业为纲，价值为领",
-            "专业如帆，价值如舵",
-            "专业为源，服务为流",
-            "专业如灯，价值如火",
-            "专业为根，价值为叶",
-            "专业如画，价值如框",
-            "专业为魂，价值为形",
-            "专业如琴，价值如弦",
-            "专业为基，价值为石",
-            "专业如歌，价值如诗",
-            "专业如风，价值如磐",
-            "专业永恒，价值永续",
-            "专业如光，价值如影",
-            "专业为本，价值为荣",
-            "专业如意，价值如愿",
-            "专业铸就，价值相承",
-
-            // 客户关怀
-            "用心关怀，温暖相伴",
-            "关怀备至，温情永驻",
-            "真诚关怀，温暖如春",
-            "关怀如一，温情似水",
-            "用心呵护，关怀永续",
-            "关怀如意，温暖如愿",
-            "真情关怀，温暖相随",
-            "关怀如虹，温情似火",
-            "用心相伴，关怀永恒",
-            "关怀如山，温暖如海",
-            "真挚关怀，温情永驻",
-            "关怀如松，温暖如春",
-            "用心守护，关怀相随",
-            "关怀如光，温情似影",
-            "真心呵护，温暖永恒",
-            "关怀如星，温情似月",
-            "用心相随，关怀永驻",
-            "关怀如帆，温暖如舵",
-            "真情相伴，温情永续",
-            "关怀如灯，温暖如火",
-            "用心呵护，关怀如一",
-            "关怀如画，温情似框",
-            "真诚相随，温暖永恒",
-            "关怀如琴，温情似弦",
-            "用心守护，关怀永续",
-            "关怀如歌，温暖如诗",
-            "真挚相伴，温情如一",
-            "关怀如风，温暖如磐",
-            "用心呵护，关怀永恒",
-            "关怀如意，温情似愿",
-
-            // 信任建立
-            "诚信为本，信任为先",
-            "信任相承，诚信永驻",
-            "诚信如山，信任如海",
-            "信任为基，诚信为重",
-            "诚信永恒，信任相随",
-            "信任如虹，诚信如日",
-            "诚信为先，信任为重",
-            "信任如松，诚信如柏",
-            "诚信永续，信任恒在",
-            "信任如光，诚信如影",
-            "诚信为本，信任为荣",
-            "信任如意，诚信如愿",
-            "诚信铸就，信任相承",
-            "信任如星，诚信如月",
-            "诚信为纲，信任为领",
-            "信任如帆，诚信如舵",
-            "诚信为源，服务为流",
-            "信任如灯，诚信如火",
-            "诚信为根，信任为叶",
-            "信任如画，诚信如框",
-            "诚信为魂，信任为形",
-            "信任如琴，诚信如弦",
-            "诚信为基，信任为石",
-            "信任如歌，诚信如诗",
-            "诚信如风，信任如磐",
-            "信任永恒，诚信永续",
-            "诚信如光，信任如影",
-            "信任为本，诚信为荣",
-            "诚信如意，信任如愿",
-            "信任铸就，诚信相承",
-
-            // 续保服务
-            "续保提醒，贴心服务",
-            "及时续保，安心无忧",
-            "专业续保，优惠多多",
-            "续保省心，服务贴心",
-            "及时提醒，优惠享不停",
-            "专属续保，服务到家",
-            "续保无忧，优惠常在",
-            "及时跟进，服务周到",
-            "专业对接，续保无忧",
-            "续保优惠，诚意十足",
-            "及时服务，实惠相随",
-            "专属顾问，一对一续",
-            "续保便捷，服务优质",
-            "及时联系，优惠不断",
-            "专业咨询，续保无虑",
-            "续保省钱，服务升级",
-            "及时办理，优惠加倍",
-            "专属方案，续保无忧",
-            "续保有礼，服务有情",
-            "及时续保，优惠多多",
-            "专业团队，一键续保",
-            "续保无忧，优惠不停",
-            "及时关怀，服务到位",
-            "专属关爱，续保无忧",
-            "续保优选，服务优享",
-            "及时跟踪，优惠升级",
-            "专业服务，续保无虑",
-            "续保省心，优惠加码",
-            "及时沟通，服务贴心",
-            "专属服务，续保无忧",
-
-            // 产品推广
-            "优质产品，实惠价格",
-            "产品可靠，服务优质",
-            "保障无忧，选择明智",
-            "产品创新，服务升级",
-            "优惠力度，诚意满满",
-            "产品齐全，选择多样",
-            "保费实惠，保障周全",
-            "产品领先，服务贴心",
-            "优质车险，明智之选",
-            "产品专业，服务到位",
-            "保障全面，价格合理",
-            "产品可信，服务可靠",
-            "优惠不断，实惠常在",
-            "产品优选，服务优享",
-            "保障升级，服务加倍",
-            "产品创新，价格实在",
-            "优质服务，实惠相随",
-            "产品齐备，选择无忧",
-            "保障有力，服务给力",
-            "产品领航，服务领先",
-            "优惠多多，实惠多多",
-            "产品可靠，放心托付",
-            "保障周到，服务细致",
-            "产品创优，服务创新",
-            "优质保障，实惠相伴",
-            "产品专属，服务专业",
-            "保障升级，价格优惠",
-            "产品领先，口碑相传",
-            "优惠政策，实惠政策",
-            "产品创新，服务创优",
-
-            // 口碑传播
-            "好评如潮，口碑相传",
-            "服务用心，好评如云",
-            "真诚相待，口碑长存",
-            "服务领先，好评不断",
-            "用心经营，口碑相随",
-            "服务周到，好评连连",
-            "真情实意，口碑相传",
-            "服务贴心，好评满满",
-            "用心服务，口碑长青",
-            "服务专业，好评如潮",
-            "真诚以待，口碑相承",
-            "服务优质，好评不绝",
-            "用心呵护，口碑相随",
-            "服务创新，好评如云",
-            "真情相伴，口碑相传",
-            "服务一流，好评连连",
-            "用心经营，口碑永存",
-            "服务卓越，好评如潮",
-            "真诚服务，口碑相传",
-            "服务领航，好评不断",
-            "用心呵护，口碑相随",
-            "服务专业，好评如云",
-            "真情实意，口碑长存",
-            "服务贴心，好评满满",
-            "用心相伴，口碑相传",
-            "服务创新，好评连连",
-            "真诚以待，口碑永存",
-            "服务优质，好评如潮",
-            "用心经营，口碑相承",
-            "服务一流，好评不绝"
-        ];
-
-        // 随机获取激励话语
-        function getRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
-            return motivationalQuotes[randomIndex];
+        function showTooltip(event, content) {
+            const target = event.currentTarget;
+            if (currentTooltipTarget === target) return;
+            
+            currentTooltipTarget = target;
+            tooltip.textContent = content;
+            tooltip.classList.add('visible');
+            
+            const rect = target.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            // 计算位置，确保提示框不会超出视窗
+            let left = rect.left + (rect.width - tooltipRect.width) / 2;
+            let top = rect.bottom + 8;
+            
+            // 水平方向调整
+            if (left < 8) {
+                left = 8;
+            } else if (left + tooltipRect.width > window.innerWidth - 8) {
+                left = window.innerWidth - tooltipRect.width - 8;
+            }
+            
+            // 垂直方向调整
+            if (top + tooltipRect.height > window.innerHeight - 8) {
+                top = rect.top - tooltipRect.height - 8;
+            }
+            
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
         }
 
-        // 显示每日话语
-        function showDailyQuote() {
-            const quote = getRandomQuote();
-            document.getElementById('dailyQuote').textContent = quote;
+        function hideTooltip(event) {
+            if (currentTooltipTarget === event.currentTarget) {
+                tooltip.classList.remove('visible');
+                currentTooltipTarget = null;
+            }
         }
-
-        // 页面加载时显示每日话语
-        window.addEventListener('load', showDailyQuote);
 
         // 计算从今天到2024年底的工作日数量
         function getWorkdaysUntilYearEnd(startDate) {
@@ -614,7 +669,6 @@
             let currentDate = new Date(startDate);
             
             while (currentDate <= endDate) {
-                // 周末（0是周日，6是周六）
                 if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
                     workdays++;
                 }
@@ -623,67 +677,110 @@
             return workdays;
         }
 
-        // 根据日期获取每日话语
-        function getDailyQuote(date) {
-            // 计算从年初到现在的天数
-            const start = new Date(date.getFullYear(), 0, 0);
-            const diff = date - start;
-            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-            
-            // 使用日期作为索引来选择话语
-            const index = dayOfYear % motivationalQuotes.length;
-            return motivationalQuotes[index];
-        }
-
+        // 计算增投比例
         function calculateInvestmentRate(date, baseDate) {
+            // 重要日期：2024年12月15日（规则变更日期）
+            const cutoffDate = new Date(2024, 11, 15);
+            
             // 将日期重置到午夜时分
             date = new Date(date);
             date.setHours(0, 0, 0, 0);
             baseDate = new Date(baseDate);
             baseDate.setHours(0, 0, 0, 0);
             
-            // 计算与基准日期的天数差
+            // 12月15日及之前的规则：基于到期年份判断
+            if (baseDate <= cutoffDate) {
+                if (date.getFullYear() === 2025) {
+                    return 5; // 2025年到期的保单
+                }
+                return 3; // 2024年或之前到期的保单
+            }
+            
+            // 12月16日及之后的规则：基于到期时间判断
             const diffTime = date - baseDate;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
-            // 只有在可续期期间（次日起30天内）才计算增投费用
             if (diffDays > 0 && diffDays <= 30) {
                 if (diffDays >= 20) {
                     return 5;
                 } else if (diffDays >= 10) {
                     return 3;
-                } else {
-                    return 0;
                 }
             }
             
-            return null;
+            return 0;
         }
 
+        // 获取日期状态描述
+        function getDateStatusDescription(status, rate) {
+            let description = '';
+            
+            // 状态描述
+            switch(status) {
+                case 'renewable':
+                    description = '可续期';
+                    break;
+                case 'expired':
+                    description = '已过期，无法办理续保';
+                    break;
+                case 'not-renewable':
+                    description = '超出可续期时间范围';
+                    break;
+                default:
+                    description = '未知状态';
+            }
+            
+            // 添加费率信息
+            if (status === 'renewable' && rate !== null) {
+                if (rate === 0) {
+                    description += '\n基础费率，无额外费用';
+                } else {
+                    description += `\n费率上浮 ${rate}%`;
+                }
+            }
+            
+            return description;
+        }
+
+        // 判断续保状态
         function isWithinRenewalPeriod(date, baseDate) {
-            // 将日期重置到午夜时分
             date = new Date(date);
             date.setHours(0, 0, 0, 0);
             baseDate = new Date(baseDate);
             baseDate.setHours(0, 0, 0, 0);
             
-            // 计算与基准日期的天数差
             const diffTime = date - baseDate;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
-            // 判断状态
             if (diffDays <= 0) {
-                // 基准日期及以前：已过期
                 return 'expired';
             } else if (diffDays <= 30) {
-                // 次日起30天内：可续期
                 return 'renewable';
             } else {
-                // 30天后：不可续期
                 return 'not-renewable';
             }
         }
 
+        // 选中日期处理
+        function handleDateSelection(dateDiv, date, baseDate) {
+            // 移除之前的选中状态
+            document.querySelectorAll('.calendar-date.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // 添加新的选中状态
+            dateDiv.classList.add('selected');
+            
+            // 获取状态和费率
+            const status = isWithinRenewalPeriod(date, baseDate);
+            const rate = status === 'renewable' ? calculateInvestmentRate(date, baseDate) : null;
+            
+            // 显示详细信息
+            const description = getDateStatusDescription(status, rate);
+            showTooltip({ currentTarget: dateDiv }, description);
+        }
+
+        // 生成日历
         function generateCalendar() {
             const selectedDate = new Date(document.getElementById('dateSearch').value);
             const currentMonth = selectedDate.getMonth();
@@ -697,6 +794,8 @@
                 const targetDate = new Date(currentYear, currentMonth + monthOffset, 1);
                 const monthSection = document.createElement('div');
                 monthSection.className = 'month-section';
+                monthSection.style.opacity = '0';
+                monthSection.style.transform = 'translateY(20px)';
                 
                 // 月份标题
                 const monthDivider = document.createElement('div');
@@ -755,9 +854,23 @@
                             const rateDiv = document.createElement('div');
                             rateDiv.className = 'investment-rate';
                             rateDiv.textContent = `+${investmentRate}%`;
-                            rateDiv.dataset.rate = investmentRate;  
+                            rateDiv.dataset.rate = investmentRate;
                             dateDiv.appendChild(rateDiv);
                         }
+                    }
+                    
+                    // 添加事件监听器
+                    dateDiv.addEventListener('mouseenter', (e) => {
+                        const description = getDateStatusDescription(status, status === 'renewable' ? calculateInvestmentRate(currentDate, selectedDate) : null);
+                        showTooltip(e, description);
+                    });
+                    
+                    dateDiv.addEventListener('mouseleave', hideTooltip);
+                    
+                    if (status !== 'expired') {
+                        dateDiv.addEventListener('click', () => {
+                            handleDateSelection(dateDiv, currentDate, selectedDate);
+                        });
                     }
                     
                     datesContainer.appendChild(dateDiv);
@@ -765,24 +878,84 @@
                 
                 monthSection.appendChild(datesContainer);
                 calendarDiv.appendChild(monthSection);
+                
+                // 添加渐入动画
+                setTimeout(() => {
+                    monthSection.style.transition = 'all 0.3s ease';
+                    monthSection.style.opacity = '1';
+                    monthSection.style.transform = 'translateY(0)';
+                }, monthOffset * 100);
             }
+            
+            // 更新每日激励话语
+            updateDailyQuote();
+        }
+
+        // 激励话语数组
+        const motivationalQuotes = [
+            "用心服务，品质如一",
+            "服务至上，品质永恒",
+            "匠心服务，卓越品质",
+            "品质服务，永续经营",
+            "专注服务，追求卓越",
+            "服务如心，品质如金",
+            "品质承诺，服务相随",
+            "服务为本，品质为先",
+            "精益求精，服务如一",
+            "品质如山，服务如水"
+        ];
+
+        // 获取随机激励话语
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+            return motivationalQuotes[randomIndex];
+        }
+
+        // 更新每日激励话语
+        function updateDailyQuote() {
+            const quoteElement = document.getElementById('dailyQuote');
+            quoteElement.style.opacity = '0';
+            quoteElement.style.transform = 'scale(0.98)';
+            
+            setTimeout(() => {
+                const quote = getRandomQuote();
+                quoteElement.textContent = quote;
+                quoteElement.style.transition = 'all 0.3s ease';
+                quoteElement.style.opacity = '1';
+                quoteElement.style.transform = 'scale(1)';
+            }, 300);
         }
 
         // 初始化
         window.onload = function() {
-            // 设置日期选择器的默认值为今天
-            const today = new Date('2024-12-16');
+            // 设置默认日期为今天
+            const today = new Date();
             const dateInput = document.getElementById('dateSearch');
             dateInput.valueAsDate = today;
             
+            // 设置日期范围（2024年12月至2025年2月）
+            dateInput.min = '2024-12-01';
+            dateInput.max = '2025-02-29';
+            
             // 生成日历
             generateCalendar();
-
-            // 显示每日话语
-            showDailyQuote();
-
-            // 添加日期选择事件监听
+            
+            // 添加日期变更事件监听
             dateInput.addEventListener('change', generateCalendar);
+            
+            // 添加图例工具提示
+            document.querySelectorAll('.legend-item[data-tooltip]').forEach(item => {
+                item.addEventListener('mouseenter', (e) => {
+                    showTooltip(e, e.currentTarget.dataset.tooltip);
+                });
+                item.addEventListener('mouseleave', hideTooltip);
+            });
+            
+            // 添加错误处理
+            window.onerror = function(msg, url, line) {
+                console.error(`发生错误：${msg}\n文件：${url}\n行号：${line}`);
+                return false;
+            };
         };
     </script>
 </body>
