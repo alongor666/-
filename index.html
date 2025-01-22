@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>续保费用变化提醒</title>
+    <title>续保提醒</title>
     <style>
         :root {
             /* 主题色 - 使用更柔和的色调 */
@@ -24,14 +24,6 @@
             --disabled-color: #9aa0a6;
             --disabled-light: #f1f3f4;
             --disabled-border: #dadce0;
-            
-            /* 费率色 - 使用更微妙的色阶 */
-            --rate-0-color: #5f6368;
-            --rate-0-light: #f8f9fa;
-            --rate-3-color: #1a73e8;
-            --rate-3-light: #e8f0fe;
-            --rate-5-color: #174ea6;
-            --rate-5-light: #e3f2fd;
             
             /* 背景色 */
             --bg-light: #f8f9fa;
@@ -191,18 +183,6 @@
             background-color: var(--disabled-light);
             border: 1px solid var(--disabled-border);
         }
-        .legend-rate-0 { 
-            background-color: var(--rate-0-light);
-            border: 1px solid var(--rate-0-color);
-        }
-        .legend-rate-3 { 
-            background-color: var(--rate-3-light);
-            border: 1px solid var(--rate-3-color);
-        }
-        .legend-rate-5 { 
-            background-color: var(--rate-5-light);
-            border: 1px solid var(--rate-5-color);
-        }
 
         .legend-item[data-tooltip] {
             cursor: help;
@@ -306,19 +286,6 @@
             margin-bottom: var(--spacing-xs);
         }
 
-        .investment-rate {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 4px;
-            border-radius: var(--radius-sm);
-            opacity: 0.9;
-            transition: opacity var(--transition-fast);
-        }
-
-        .calendar-date:hover .investment-rate {
-            opacity: 1;
-        }
-
         /* 状态样式 */
         .calendar-date.renewable {
             background-color: var(--success-light);
@@ -357,22 +324,6 @@
             opacity: 0.5;
         }
 
-        /* 费率样式 */
-        .investment-rate[data-rate="0"] {
-            color: var(--rate-0-color);
-            background-color: var(--rate-0-light);
-        }
-
-        .investment-rate[data-rate="3"] {
-            color: var(--rate-3-color);
-            background-color: var(--rate-3-light);
-        }
-
-        .investment-rate[data-rate="5"] {
-            color: var(--rate-5-color);
-            background-color: var(--rate-5-light);
-        }
-
         /* 日期选中状态 */
         .calendar-date.selected {
             transform: scale(1.05);
@@ -392,11 +343,22 @@
             color: var(--primary-dark);
         }
 
-        #dailyQuote {
+        .daily-quote {
             font-size: 1rem;
             font-weight: 500;
             transition: all var(--transition-normal);
             line-height: 1.6;
+        }
+
+        .quote-content {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .quote-date {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
         /* 工具提示 */
@@ -498,7 +460,7 @@
                 padding: var(--spacing-md);
             }
 
-            #dailyQuote {
+            .daily-quote {
                 font-size: 0.875rem;
             }
 
@@ -508,10 +470,6 @@
 
             .date-number {
                 font-size: 0.875rem;
-            }
-
-            .investment-rate {
-                font-size: 0.6875rem;
             }
         }
 
@@ -529,10 +487,6 @@
                 --warning-light: rgba(251,188,5,0.1);
                 --danger-light: rgba(234,67,53,0.1);
                 --disabled-light: rgba(154,160,166,0.1);
-                
-                --rate-0-light: rgba(95,99,104,0.1);
-                --rate-3-light: rgba(26,115,232,0.1);
-                --rate-5-light: rgba(23,78,166,0.1);
             }
 
             .calendar-date.expired::after {
@@ -574,12 +528,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>续保费用变化提醒</h1>
-            <p class="subtitle">轻松查看续保费用变化</p>
+            <h1>续保提醒</h1>
+            <p class="subtitle">轻松查看续保变化</p>
         </div>
         
         <div class="date-input-container">
-            <label for="dateSearch">选择签单日期，查看费用变化</label>
+            <label for="dateSearch">选择签单日期，查看变化</label>
             <input type="date" id="dateSearch" onchange="generateCalendar()">
         </div>
 
@@ -596,24 +550,15 @@
                 <div class="legend-color legend-not-renewable"></div>
                 <span>不可续期</span>
             </div>
-            <div class="legend-item" data-tooltip="标准费率，无额外费用">
-                <div class="legend-color legend-rate-0"></div>
-                <span>基础费率</span>
-            </div>
-            <div class="legend-item" data-tooltip="在基础费率上增加 3%">
-                <div class="legend-color legend-rate-3"></div>
-                <span>+3% 费率</span>
-            </div>
-            <div class="legend-item" data-tooltip="在基础费率上增加 5%">
-                <div class="legend-color legend-rate-5"></div>
-                <span>+5% 费率</span>
-            </div>
         </div>
 
         <div id="calendar"></div>
 
         <div class="daily-quote-container">
-            <div id="dailyQuote"></div>
+            <div class="daily-quote">
+                <div class="quote-content"></div>
+                <div class="quote-date"></div>
+            </div>
         </div>
     </div>
 
@@ -677,71 +622,6 @@
             return workdays;
         }
 
-        // 计算增投比例
-        function calculateInvestmentRate(date, baseDate) {
-            // 重要日期：2024年12月15日（规则变更日期）
-            const cutoffDate = new Date(2024, 11, 15);
-            
-            // 将日期重置到午夜时分
-            date = new Date(date);
-            date.setHours(0, 0, 0, 0);
-            baseDate = new Date(baseDate);
-            baseDate.setHours(0, 0, 0, 0);
-            
-            // 12月15日及之前的规则：基于到期年份判断
-            if (baseDate <= cutoffDate) {
-                if (date.getFullYear() === 2025) {
-                    return 5; // 2025年到期的保单
-                }
-                return 3; // 2024年或之前到期的保单
-            }
-            
-            // 12月16日及之后的规则：基于到期时间判断
-            const diffTime = date - baseDate;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays > 0 && diffDays <= 30) {
-                if (diffDays >= 20) {
-                    return 5;
-                } else if (diffDays >= 10) {
-                    return 3;
-                }
-            }
-            
-            return 0;
-        }
-
-        // 获取日期状态描述
-        function getDateStatusDescription(status, rate) {
-            let description = '';
-            
-            // 状态描述
-            switch(status) {
-                case 'renewable':
-                    description = '可续期';
-                    break;
-                case 'expired':
-                    description = '已过期，无法办理续保';
-                    break;
-                case 'not-renewable':
-                    description = '超出可续期时间范围';
-                    break;
-                default:
-                    description = '未知状态';
-            }
-            
-            // 添加费率信息
-            if (status === 'renewable' && rate !== null) {
-                if (rate === 0) {
-                    description += '\n基础费率，无额外费用';
-                } else {
-                    description += `\n费率上浮 ${rate}%`;
-                }
-            }
-            
-            return description;
-        }
-
         // 判断续保状态
         function isWithinRenewalPeriod(date, baseDate) {
             date = new Date(date);
@@ -771,13 +651,34 @@
             // 添加新的选中状态
             dateDiv.classList.add('selected');
             
-            // 获取状态和费率
+            // 获取状态
             const status = isWithinRenewalPeriod(date, baseDate);
-            const rate = status === 'renewable' ? calculateInvestmentRate(date, baseDate) : null;
             
             // 显示详细信息
-            const description = getDateStatusDescription(status, rate);
+            const description = getStatusDescription(status);
             showTooltip({ currentTarget: dateDiv }, description);
+        }
+
+        // 获取状态描述
+        function getStatusDescription(status) {
+            let description = '';
+            
+            // 状态描述
+            switch(status) {
+                case 'renewable':
+                    description = '可续期';
+                    break;
+                case 'expired':
+                    description = '已过期，无法办理续保';
+                    break;
+                case 'not-renewable':
+                    description = '超出可续期时间范围';
+                    break;
+                default:
+                    description = '未知状态';
+            }
+            
+            return description;
         }
 
         // 生成日历
@@ -847,21 +748,9 @@
                     const status = isWithinRenewalPeriod(currentDate, selectedDate);
                     dateDiv.classList.add(status);
                     
-                    // 只在可续期状态下显示增投费用
-                    if (status === 'renewable') {
-                        const investmentRate = calculateInvestmentRate(currentDate, selectedDate);
-                        if (investmentRate !== null) {
-                            const rateDiv = document.createElement('div');
-                            rateDiv.className = 'investment-rate';
-                            rateDiv.textContent = `+${investmentRate}%`;
-                            rateDiv.dataset.rate = investmentRate;
-                            dateDiv.appendChild(rateDiv);
-                        }
-                    }
-                    
                     // 添加事件监听器
                     dateDiv.addEventListener('mouseenter', (e) => {
-                        const description = getDateStatusDescription(status, status === 'renewable' ? calculateInvestmentRate(currentDate, selectedDate) : null);
+                        const description = getStatusDescription(status);
                         showTooltip(e, description);
                     });
                     
@@ -893,69 +782,52 @@
 
         // 激励话语数组
         const motivationalQuotes = [
-            "用心服务，品质如一",
-            "服务至上，品质永恒",
-            "匠心服务，卓越品质",
-            "品质服务，永续经营",
-            "专注服务，追求卓越",
-            "服务如心，品质如金",
-            "品质承诺，服务相随",
-            "服务为本，品质为先",
-            "精益求精，服务如一",
-            "品质如山，服务如水"
+            "用心服务，诚信为本",
+            "专业服务，贴心守护",
+            "及时续保，安心无忧",
+            "保险保障，从心开始",
+            "续保提醒，贴心服务",
+            "守护所爱，从不懈怠",
+            "保险服务，以客为尊",
+            "专业守护，温暖相伴",
+            "续保服务，用心呈现",
+            "贴心提醒，安心相伴"
         ];
 
         // 获取随机激励话语
         function getRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
-            return motivationalQuotes[randomIndex];
+            const index = Math.floor(Math.random() * motivationalQuotes.length);
+            return motivationalQuotes[index];
         }
 
         // 更新每日激励话语
         function updateDailyQuote() {
-            const quoteElement = document.getElementById('dailyQuote');
-            quoteElement.style.opacity = '0';
-            quoteElement.style.transform = 'scale(0.98)';
-            
-            setTimeout(() => {
-                const quote = getRandomQuote();
-                quoteElement.textContent = quote;
-                quoteElement.style.transition = 'all 0.3s ease';
-                quoteElement.style.opacity = '1';
-                quoteElement.style.transform = 'scale(1)';
-            }, 300);
+            const quoteContainer = document.querySelector('.daily-quote');
+            if (quoteContainer) {
+                const today = new Date();
+                const dateString = today.toLocaleDateString('zh-CN');
+                quoteContainer.innerHTML = `
+                    <div class="quote-content">${getRandomQuote()}</div>
+                    <div class="quote-date">${dateString}</div>
+                `;
+            }
         }
 
         // 初始化
         window.onload = function() {
-            // 设置默认日期为今天
+            // 设置日期选择器的默认值为今天
             const today = new Date();
             const dateInput = document.getElementById('dateSearch');
             dateInput.valueAsDate = today;
             
-            // 设置日期范围（2024年12月至2025年2月）
-            dateInput.min = '2024-12-01';
-            dateInput.max = '2025-02-29';
-            
             // 生成日历
             generateCalendar();
             
-            // 添加日期变更事件监听
-            dateInput.addEventListener('change', generateCalendar);
+            // 更新激励话语
+            updateDailyQuote();
             
-            // 添加图例工具提示
-            document.querySelectorAll('.legend-item[data-tooltip]').forEach(item => {
-                item.addEventListener('mouseenter', (e) => {
-                    showTooltip(e, e.currentTarget.dataset.tooltip);
-                });
-                item.addEventListener('mouseleave', hideTooltip);
-            });
-            
-            // 添加错误处理
-            window.onerror = function(msg, url, line) {
-                console.error(`发生错误：${msg}\n文件：${url}\n行号：${line}`);
-                return false;
-            };
+            // 每天更新一次激励话语
+            setInterval(updateDailyQuote, 24 * 60 * 60 * 1000);
         };
     </script>
 </body>
